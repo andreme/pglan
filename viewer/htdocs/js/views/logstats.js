@@ -19,7 +19,13 @@ viewer.LogStatsView.prototype._calculate = function () {
 	this._first = Infinity;
 	this._last = null;
 
-	this._log.walkEvents(this._addQueryEvent, this);
+	this._log.walkEvents(viewer.LOG_TYPE_QUERY, this._addQueryEvent, this);
+	this._log.walkEvents(viewer.LOG_TYPE_SYSTEM, this._addSystemEvent, this);
+};
+
+viewer.LogStatsView.prototype._addSystemEvent = function (query, event) {
+
+	this._statementCount++;
 };
 
 viewer.LogStatsView.prototype._addQueryEvent = function (query, event) {

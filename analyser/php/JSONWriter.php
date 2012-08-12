@@ -13,17 +13,32 @@ class JSONWriter extends Writer {
 	protected function doWrite() {
 		$handle = fopen($this->filename, 'w');
 
-		fwrite($handle, '{"log": [');
+		fwrite($handle, '{"log": {');
 
+		$this->writeTypes($handle);
+
+		fwrite($handle, '}}');
+
+		fclose($handle);
+	}
+
+	private function writeTypes($handle) {
 		$i = 0;
-//		fwrite($handle, json_encode($this->list->getEntries()));
+
+		foreach ($this->list->getTypes() as $type) {
+			fwrite($handle, ($i++ > 0 ? ',' : '').'"'.$type.'": [');
+			$this->writeEntries($handle, $type);
+			fwrite($handle, ']');
+		}
+	}
+
+	private function writeEntries($handle, $type) {
+		$i = 0;
+
 		/* @var $entry LogObject */
-		foreach ($this->list->getEntries() as $entry) {
+		foreach ($this->list->getEntries($type) as $entry) {
 			fwrite($handle, ($i++ > 0 ? ',' : '').json_encode($entry->jsonSerialize()));
 		}
-
-		fwrite($handle, ']}');
-		fclose($handle);
 	}
 
 }

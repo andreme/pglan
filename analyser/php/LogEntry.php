@@ -1,6 +1,6 @@
 <?php
 
-class LogEntry {
+abstract class LogEntry {
 
 	protected $multiLine = false;
 
@@ -91,5 +91,7 @@ class LogEntry {
 
 		return $result;
 	}
+
+	abstract public function getType();
 
 }

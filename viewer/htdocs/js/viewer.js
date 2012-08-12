@@ -11,6 +11,9 @@ viewer.view = null;
 
 viewer.statsView = null;
 
+viewer.LOG_TYPE_QUERY = 'Query';
+viewer.LOG_TYPE_SYSTEM = 'System';
+
 viewer.start = function () {
 	$('#Templates').load('templates.html');
 

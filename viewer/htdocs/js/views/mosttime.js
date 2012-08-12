@@ -15,8 +15,7 @@ viewer.views['MostTime'] = {'Caption': 'Most Time', 'Class': viewer.MostTimeView
 viewer.MostTimeView.prototype._calculate = function () {
 	this._queries = {};
 
-	this._log.walkEvents(this._addQueryEvent, this);
-
+	this._log.walkEvents(viewer.LOG_TYPE_QUERY, this._addQueryEvent, this);
 
 	var q = [];
 	$.each(this._queries, function () {

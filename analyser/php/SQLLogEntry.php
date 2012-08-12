@@ -53,4 +53,8 @@ class SQLLogEntry extends LogEntry {
 		return $prefix.$name;
 	}
 
+	public function getType() {
+		return 'Query';
+	}
+
 }

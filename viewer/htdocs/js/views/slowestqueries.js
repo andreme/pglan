@@ -15,7 +15,7 @@ viewer.views['SlowestQueries'] = {'Caption': 'Slowest Queries', 'Class': viewer.
 viewer.SlowestQueriesView.prototype._calculate = function () {
 	this._queries = [];
 
-	this._log.walkEvents(this._addQueryEvent, this);
+	this._log.walkEvents(viewer.LOG_TYPE_QUERY, this._addQueryEvent, this);
 };
 
 viewer.SlowestQueriesView.prototype._addQueryEvent = function (query, event) {

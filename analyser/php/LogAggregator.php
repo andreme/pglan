@@ -10,17 +10,24 @@ class LogAggregator {
 	 */
 	public function addEntry($entry) {
 		/* @var $existingEntry LogObject */
-		$existingEntry = @$this->list[$entry->getHash()];
+		$existingEntry = @$this->list[$entry->getType()][$entry->getHash()];
 
 		if ($existingEntry) {
 			$existingEntry->addEvent($entry);
 		} else {
-			$this->list[$entry->getHash()] = new LogObject($entry);
+			if (!isset($this->list[$entry->getType()])) {
+				$this->list[$entry->getType()] = array();
+			}
+			$this->list[$entry->getType()][$entry->getHash()] = new LogObject($entry);
 		}
 	}
 
-	public function getEntries() {
-		return $this->list;
+	public function getEntries($type) {
+		return $this->list[$type];
+	}
+
+	public function getTypes() {
+		return array_keys($this->list);
 	}
 
 }
