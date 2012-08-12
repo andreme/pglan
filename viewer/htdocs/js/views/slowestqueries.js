@@ -1,0 +1,72 @@
+
+viewer.SlowestQueriesView = function ($container) {
+	viewer.View.call(this, $container);
+
+	this._maxQueries = 50;
+
+	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
+
+	this._queries = [];
+};
+viewer.SlowestQueriesView.prototype = new viewer.View();
+
+viewer.views['SlowestQueries'] = {'Caption': 'Slowest Queries', 'Class': viewer.SlowestQueriesView};
+
+viewer.SlowestQueriesView.prototype._calculate = function () {
+	this._queries = [];
+
+	this._log.walkEvents(this._addQueryEvent, this);
+};
+
+viewer.SlowestQueriesView.prototype._addQueryEvent = function (query, event) {
+
+	var len = this._queries.length;
+	for (var i = 0; i < len; i++) {
+
+		if ((event['Duration'] || 0) > (this._queries[i]['Event']['Duration'] || 0)) {
+			this._queries.splice(i, 0, {'Query': query, 'Event': event});
+
+			if (len >= this._maxQueries) {
+				this._queries.splice(this._maxQueries, 999);
+			}
+
+			return;
+		}
+	}
+
+	if (len < this._maxQueries) {
+		this._queries.push({'Query': query, 'Event': event});
+	} else if (len > this._maxQueries) {
+		this._queries.splice(this._maxQueries, 999);
+	}
+};
+
+viewer.SlowestQueriesView.prototype._display = function () {
+	var self = this;
+
+	this._$container.empty();
+
+	$('#Templates .SlowestQueries').clone().appendTo(this._$container);
+
+	var $orow = this._$container.find('.Row').detach();
+
+	$.each(this._queries, function (i) {
+
+		var $row = $orow.clone();
+
+		$row.data('Query', this['Query']);
+		$row.data('Event', this['Event']);
+
+		$row.find('[data-name=Rank]').text(i+1);
+		$row.find('[data-name=Duration]').text((this['Event']['Duration'] / 1000).toFixed(2));
+		$row.find('[data-name=Query]').text(replaceSQLParams(this['Query']['Text'], this['Event']['Params']));
+
+		$row.appendTo(self._$container.find('tbody'));
+	});
+
+	self._$container.find('table').on('contextmenu', 'td', null, function (e) {
+		return self._clickMenuEvent(e);
+	});
+
+	sh_highlightDocument();
+};

@@ -1,0 +1,45 @@
+table.queryList td, table.queryList th {
+    padding: 2px;
+}
+table.queryList th {
+    background-color: #DDDDDD;
+    border: 1px solid #CCCCCC;
+}
+/*table.queryList th.left {
+    text-align: left !important;
+}*/
+
+table.queryList tr:nth-child(even) td {
+    background-color: #FFFFFF;
+    border: 1px solid #EEEEEE;
+}
+table.queryList tr:nth-child(odd) td {
+    background-color: #EEEEEE;
+    border: 1px solid #EEEEEE;
+}
+table.queryList td.top {
+    vertical-align: top;
+}
+table.queryList td.right {
+    text-align: right;
+}
+table.queryList td.center {
+    text-align: center;
+}
+table.queryList td.relevantInformation {
+    font-weight: bold;
+}
+table.queryList div.examples {
+    background-color: #EBF0FC;
+    border: 1px solid #FFFFFF;
+    margin: 5px;
+    padding: 6px;
+}
+
+
+/* source highlighting */
+pre.sh_sourceCode {
+    background-color: inherit !important;
+	white-space: pre-wrap;
+	margin: 0;
+}
