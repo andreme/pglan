@@ -8,5 +8,8 @@ spl_autoload_register(function ($class) {
 });
 
 
-$main = new Main();
+require_once __DIR__.'/../../php/DefaultConfig.php';
+
+
+$main = new Main(DefaultConfig::create());
 $main->run();

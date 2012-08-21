@@ -4,13 +4,23 @@ class Main {
 
 	private $dataFiles = array();
 
+	/**
+	 *
+	 * @var DefaultConfig
+	 */
+	private $config;
+	
+	public function __construct($config) {
+		$this->config = $config;
+	}
+
 	public function run() {
 
 		$this->prepareRun();
 
 		if (isset($_REQUEST['loadfile'])) {
 			if (isset($this->dataFiles[$_REQUEST['loadfile']])) {
-				readfile(__DIR__.'/../../data/'.$_REQUEST['loadfile']);
+				readfile($this->config->DataPath.$_REQUEST['loadfile']);
 				die();
 			} else {
 				throw new Exception('File not found');
@@ -26,7 +36,7 @@ class Main {
 	}
 
 	private function retrieveFileList() {
-		foreach (glob(__DIR__.'/../../data/*.json') as $filename) {
+		foreach (glob($this->config->DataPath.'*.json') as $filename) {
 			$this->dataFiles[basename($filename)] = array('FileName' => basename($filename), 'FileSize' => filesize($filename));
 		}
 	}

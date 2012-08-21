@@ -2,3 +2,4 @@ syntax: glob
 nbproject/*
 data/*
 logs/*
+config.php

@@ -1,5 +1,9 @@
 <?php
 
+
+require_once __DIR__.'/php/DefaultConfig.php';
+$config = DefaultConfig::create();
+
 spl_autoload_register(function ($class) {
 	require_once __DIR__."/analyser/php/$class.php";
 	return true;
@@ -30,7 +34,7 @@ $start = new DateTime();
 
 $parser->parse();
 
-$writer = new JSONWriter($list, __DIR__.'/data/'.basename($argv[1]).'.json');
+$writer = new JSONWriter($list, $config->DataPath.basename($argv[1]).'.json');
 
 $writer->write();
 
