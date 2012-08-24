@@ -39,9 +39,13 @@ class SQLLogEntry extends LogEntry {
 
 		$ct = count($this->params);
 
-		while ($ct > 25) {
-			$name .= 'Z';
-			$ct -= 26;
+		$countFullAlpha = floor($ct / 26);
+		
+		$ct -= ($countFullAlpha * 26);
+		
+		while ($countFullAlpha) {
+			$name .= chr(64+min(26, $countFullAlpha));
+			$countFullAlpha -= min(26, $countFullAlpha);
 		}
 
 		$name .= chr(65+$ct);
