@@ -66,6 +66,9 @@ class Analyser {
 	}
 
 	protected function init() {
+
+		require_once __DIR__.'/../../php/helper.php';
+		
 		$this->initConfig();
 
 		$this->initAutoload();
