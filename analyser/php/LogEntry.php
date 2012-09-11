@@ -1,6 +1,6 @@
 <?php
 
-abstract class LogEntry {
+class LogEntry {
 
 	protected $multiLine = false;
 
@@ -42,7 +42,7 @@ abstract class LogEntry {
 
 	public function addLine($line) {
 		if (!$this->multiLine) {
-			throw new Exception();
+			throw new DOMException();
 		}
 
 		$this->text .= "\n".$line;
@@ -92,6 +92,8 @@ abstract class LogEntry {
 		return $result;
 	}
 
-	abstract public function getType();
+	public function getType() {
+		throw new BadMethodCallException();
+	}
 
 }
