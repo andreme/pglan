@@ -46,4 +46,16 @@ class LogObject {
 		return $result;
 	}
 
+	/**
+	 *
+	 * @return LogEntry
+	 */
+	public function getEntry() {
+		return $this->entry;
+	}
+
+	public function getEvents() {
+		return $this->events;
+	}
+
 }

@@ -21,9 +21,9 @@ class FileReader extends Reader {
 				break;
 		}
 
-		$this->handle = fopen($filename, 'r');
+		$this->setHandle(fopen($filename, 'r'));
 
-		if ($this->handle === false) {
+		if ($this->getHandle() === false) {
 			throw new Exception('Can not open file: '.$this->filename);
 		}
 

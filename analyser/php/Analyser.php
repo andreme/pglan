@@ -8,37 +8,37 @@ class Analyser {
 	 *
 	 * @var DefaultConfig
 	 */
-	private $config;
+	protected $config;
 
 	/**
 	 *
 	 * @var Reader
 	 */
-	private $reader;
+	protected $reader;
 
 	/**
 	 *
 	 * @var Logger
 	 */
-	private $logger;
+	protected $logger;
 
 	/**
 	 *
 	 * @var LogAggregator
 	 */
-	private $list;
+	protected $list;
 
 	/**
 	 *
 	 * @var Parser
 	 */
-	private $parser;
+	protected $parser;
 
 	/**
 	 *
 	 * @var Writer
 	 */
-	private $writer;
+	protected $writer;
 
 	private $startTime;
 	private $endTime;
@@ -68,7 +68,7 @@ class Analyser {
 	protected function init() {
 
 		require_once __DIR__.'/../../php/helper.php';
-		
+
 		$this->initConfig();
 
 		$this->initAutoload();

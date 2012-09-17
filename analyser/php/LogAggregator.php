@@ -30,4 +30,8 @@ class LogAggregator {
 		return array_keys($this->list);
 	}
 
+	public function isEmpty() {
+		return !$this->list;
+	}
+
 }

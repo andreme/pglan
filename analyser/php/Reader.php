@@ -6,7 +6,7 @@ class Reader {
 
 	private $line;
 
-	protected $handle;
+	private $handle;
 
 	private $lineNo = 0;
 
@@ -32,6 +32,14 @@ class Reader {
 
 	public function getLineNo() {
 		return $this->lineNo;
+	}
+
+	public function getHandle() {
+		return $this->handle;
+	}
+
+	public function setHandle($handle) {
+		$this->handle = $handle;
 	}
 
 }
