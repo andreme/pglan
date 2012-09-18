@@ -103,7 +103,7 @@ class PgLogParser extends Parser {
 
 	protected function isStartOfLogEntry() {
 		// 1 = datetime, 2 = user, 3 = db, 4 = level, 5 = rest of line
-		if (preg_match("/^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d [a-z]{3})\s+([^\s]*)\s([^\s]*)\s(LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):[\s]+(.*)$/i", // (?:[0-9XPFDBLA]{2}[0-9A-Z]{3}:[\s]+)?
+		if (preg_match("/^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)(?: [a-z]{3})?\s+([^\s]*)\s([^\s]*)\s(LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):[\s]+(.*)$/i", // (?:[0-9XPFDBLA]{2}[0-9A-Z]{3}:[\s]+)?
 			$this->line, $this->start)) {
 
 			return true;
