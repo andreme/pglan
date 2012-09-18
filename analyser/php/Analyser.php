@@ -82,6 +82,8 @@ class Analyser {
 		$this->initParser();
 
 		$this->initWriter();
+
+		LogEntry::$maxParamSize = $this->config->MaxParamSize;
 	}
 
 	protected function initConfig() {

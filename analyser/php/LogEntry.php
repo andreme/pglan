@@ -2,6 +2,8 @@
 
 class LogEntry {
 
+	public static $maxParamSize;
+
 	protected $multiLine = false;
 
 	protected $dummy = false;
@@ -61,6 +63,9 @@ class LogEntry {
 	}
 
 	public function addParam($name, $value) {
+		if (strlen($value) > self::$maxParamSize) {
+			$value = 'BLOB replaced';
+		}
 		$this->params[$name] = $value;
 	}
 
