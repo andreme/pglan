@@ -9,6 +9,8 @@ viewer.View = function ($container) {
 	this._$menu = null;
 
 	this._$menuTarget = null;
+
+	this._params = {};
 };
 
 viewer.View.prototype.load = function (log) {
@@ -32,6 +34,11 @@ viewer.View.prototype.display = function () {
 };
 
 viewer.View.prototype._display = function () {
+};
+
+viewer.View.prototype.setParams = function (params) {
+	this._params = params || {};
+	params && (this._log = null);
 };
 
 viewer.View.prototype._clickMenuEvent = function (e) {
@@ -95,4 +102,14 @@ viewer.View.prototype._showAnalyse = function ($el) {
 	var event = $row.data('Event');
 
 	viewer.showCopyText(createAnalyseStatement(query['Text'], event['Params']));
+};
+
+viewer.View.prototype._showDetail = function ($el) {
+	var $row = $el.closest('tr');
+
+	var query = $row.data('Query');
+
+	setTimeout(function () {
+		viewer.selectView('QueryDetail', {'Query': query});
+	}, 0);
 };

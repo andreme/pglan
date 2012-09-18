@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
 		<title>PG Logfile viewer</title>
 
 		<link rel="stylesheet" type="text/css" href="css/viewer.css" />
@@ -21,6 +22,7 @@
 		<script type="text/javascript" src="js/views/slowestqueries.js"></script>
 		<script type="text/javascript" src="js/views/mosttime.js"></script>
 		<script type="text/javascript" src="js/views/logstats.js"></script>
+		<script type="text/javascript" src="js/views/querydetail.js"></script>
 	</head>
 	<body>
 		<div id="head">

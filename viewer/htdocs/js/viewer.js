@@ -14,6 +14,8 @@ viewer.statsView = null;
 viewer.LOG_TYPE_QUERY = 'Query';
 viewer.LOG_TYPE_SYSTEM = 'System';
 
+viewer._blockViewChange = false;
+
 viewer.start = function () {
 	$('#Templates').load('templates.html');
 
@@ -30,7 +32,7 @@ viewer.start = function () {
 	});
 
 	$('#ViewSelect').change(function () {
-		viewer.selectView($(this).val());
+		!viewer._blockViewChange && viewer._selectView($(this).val());
 	}).change();
 
 	viewer.statsView = new viewer.LogStatsView($('#LogStats'));
@@ -54,7 +56,17 @@ viewer.load = function (name) {
 	});
 };
 
-viewer.selectView = function (name) {
+viewer.selectView = function (name, params) {
+	viewer._selectView(name, params);
+
+	viewer._blockViewChange = true;
+	$('#ViewSelect').val(name);
+	viewer._blockViewChange = false;
+
+	$(window).scrollTop(0);
+};
+
+viewer._selectView = function (name, params) {
 
 	var view = viewer.views[name];
 
@@ -65,6 +77,8 @@ viewer.selectView = function (name) {
 	viewer.view = view['Instance'];
 
 	if (viewer.log) {
+		viewer.view.setParams(params ? params : null);
+
 		viewer.view.load(viewer.log);
 		viewer.view.display();
 	}

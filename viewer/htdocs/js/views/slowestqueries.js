@@ -5,6 +5,7 @@ viewer.SlowestQueriesView = function ($container) {
 	this._maxQueries = 50;
 
 	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
+	this._menu.push({'Caption': 'Detail', 'Click': this._showDetail, 'Icon': 'ui-icon-zoomin'});
 
 	this._queries = [];
 };
