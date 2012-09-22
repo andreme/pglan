@@ -104,7 +104,7 @@ class ParserTest extends PGLANTestCase {
 
 		$logEntry = $this->extractOneEntry($log);
 
-		$this->assertEquals(strtotime('2012-07-11 20:42:32 EST'), $logEntry->getDatetime());
+		$this->assertEquals(strtotime('2012-07-11 20:42:32 UTC'), $logEntry->getDatetime());
 		$this->assertEquals(0.295, $logEntry->getDuration());
 		$this->assertEquals('SELECT X FROM Y', $logEntry->getText());
 		$this->assertCount(0, $logEntry->getParams());

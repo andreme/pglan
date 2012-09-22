@@ -143,7 +143,7 @@ class PgLogParser extends Parser {
 	private function startSQLEntry($sql, $duration = null) {
 		$this->endEntry();
 
-		$this->entry = new SQLLogEntry($this->start[1], $this->start[2],
+		$this->entry = new SQLLogEntry($this->start[1].' UTC', $this->start[2],
 			$this->start[3], $this->start[4], $sql, $duration);
 	}
 

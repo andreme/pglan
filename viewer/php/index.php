@@ -15,7 +15,6 @@
 		<script type="text/javascript" src="js/vendor/sh_main.js"></script>
 		<script type="text/javascript" src="js/vendor/sh_sql.js"></script>
 		<script type="text/javascript" src="js/funcs.js"></script>
-		<script type="text/javascript" src="js/date.js"></script>
 		<script type="text/javascript" src="js/viewer.js"></script>
 		<script type="text/javascript" src="js/log.js"></script>
 		<script type="text/javascript" src="js/view.js"></script>
