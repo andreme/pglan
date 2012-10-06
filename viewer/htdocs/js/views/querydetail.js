@@ -10,7 +10,7 @@ viewer.QueryDetailView = function ($container) {
 };
 viewer.QueryDetailView.prototype = new viewer.View();
 
-viewer.views['QueryDetail'] = {'Caption': 'Query Detail', 'Class': viewer.QueryDetailView};
+viewer.views['QueryDetail'] = {'Caption': 'Query Detail', 'Class': viewer.QueryDetailView, 'ShowInList': false};
 
 viewer.QueryDetailView.prototype._calculate = function () {
 	this._query = this._params['Query'];
@@ -28,16 +28,10 @@ viewer.QueryDetailView.prototype._calculate = function () {
 	this._events = events;
 };
 
-viewer.QueryDetailView.prototype._display = function () {
+viewer.QueryDetailView.prototype._generate = function () {
 	var self = this;
 
 	this._$container.empty();
-
-	if (!this._query) {
-		this._$container.text('Dont select this view directly, use the context menu on a query.');
-
-		return;
-	}
 
 	$('#Templates .QueryDetail').clone().appendTo(this._$container);
 
@@ -64,7 +58,11 @@ viewer.QueryDetailView.prototype._display = function () {
 		return self._clickMenuEvent(e);
 	});
 
-	sh_highlightDocument();
+	this._$container.find('button.Back').click(function () {
+		viewer.man.goBack();
+	});
+
+	this._highlightCode();
 
 	this._createGraph();
 };

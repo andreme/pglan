@@ -52,7 +52,7 @@ viewer.MostTimeView.prototype._addQueryEvent = function (query, event) {
 	}
 };
 
-viewer.MostTimeView.prototype._display = function () {
+viewer.MostTimeView.prototype._generate = function () {
 	var self = this;
 
 	this._$container.empty();
@@ -81,5 +81,5 @@ viewer.MostTimeView.prototype._display = function () {
 		return self._clickMenuEvent(e);
 	});
 
-	sh_highlightDocument();
+	this._highlightCode();
 };

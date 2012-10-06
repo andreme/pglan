@@ -42,7 +42,7 @@ viewer.SlowestQueriesView.prototype._addQueryEvent = function (query, event) {
 	}
 };
 
-viewer.SlowestQueriesView.prototype._display = function () {
+viewer.SlowestQueriesView.prototype._generate = function () {
 	var self = this;
 
 	this._$container.empty();
@@ -69,5 +69,5 @@ viewer.SlowestQueriesView.prototype._display = function () {
 		return self._clickMenuEvent(e);
 	});
 
-	sh_highlightDocument();
+	this._highlightCode();
 };

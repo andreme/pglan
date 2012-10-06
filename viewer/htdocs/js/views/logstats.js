@@ -53,7 +53,7 @@ viewer.LogStatsView.prototype._addQueryEvent = function (query, event) {
 	}
 };
 
-viewer.LogStatsView.prototype._display = function () {
+viewer.LogStatsView.prototype._generate = function () {
 	this._$container.empty();
 
 	var $tmpl = $('#Templates .LogStats').clone().appendTo(this._$container);

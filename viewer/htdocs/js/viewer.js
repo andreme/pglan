@@ -7,14 +7,10 @@ viewer.files = {};
 
 viewer.log = null;
 
-viewer.view = null;
-
 viewer.statsView = null;
 
 viewer.LOG_TYPE_QUERY = 'Query';
 viewer.LOG_TYPE_SYSTEM = 'System';
-
-viewer._blockViewChange = false;
 
 viewer.start = function () {
 	$('#Templates').load('templates.html');
@@ -28,40 +24,41 @@ viewer.start = function () {
 	});
 
 	$.each(viewer.views, function (name) {
+		if ((this['ShowInList'] !== undefined) && !this['ShowInList']) {
+			return;
+		}
 		$('#ViewSelect').append($('<option></option>').attr('value', name).text(this['Caption']));
 	});
 
 	$('#ViewSelect').change(function () {
-		!viewer._blockViewChange && viewer._selectView($(this).val());
-	}).change();
+		viewer._selectView($(this).val());
+	});
 
 	viewer.statsView = new viewer.LogStatsView($('#LogStats'));
+
+	viewer.man = new viewer.ViewManager($('#View'));
 };
 
-viewer.load = function (name) {
+viewer.load = function (filename) {
 	var opt = {};
 	opt['dataType'] = 'json';
-	opt['url'] = 'index.php?loadfile='+name;
+	opt['url'] = 'index.php?loadfile='+filename;
 
 	$.ajax(opt).done(function (data) {
 		viewer.log = new viewer.Log(data);
 
 		viewer.statsView.load(viewer.log);
-		viewer.statsView.display();
+		viewer.statsView.generate();
+		viewer.statsView.show();
 
-		if (viewer.view) {
-			viewer.view.load(viewer.log);
-			viewer.view.display();
-		}
+		viewer.man.clear();
+		viewer.man.setLog(viewer.log);
+		viewer.man.displayView(viewer.views[$('#ViewSelect').val()]['Class']);
 	});
 };
 
 viewer.selectView = function (name, params) {
 	viewer._selectView(name, params);
-
-	viewer._blockViewChange = true;
-	$('#ViewSelect').val(name);
-	viewer._blockViewChange = false;
 
 	$(window).scrollTop(0);
 };
@@ -70,18 +67,7 @@ viewer._selectView = function (name, params) {
 
 	var view = viewer.views[name];
 
-	if (!view['Instance']) {
-		view['Instance'] = new view['Class']($('#View'));
-	}
-
-	viewer.view = view['Instance'];
-
-	if (viewer.log) {
-		viewer.view.setParams(params ? params : null);
-
-		viewer.view.load(viewer.log);
-		viewer.view.display();
-	}
+	viewer.man.displayView(view['Class'], params);
 };
 
 viewer.showCopyText = function (text) {

@@ -19,6 +19,7 @@
 		<script type="text/javascript" src="js/vendor/flot/jquery.flot.resize.js"></script>
 		<script type="text/javascript" src="js/funcs.js"></script>
 		<script type="text/javascript" src="js/viewer.js"></script>
+		<script type="text/javascript" src="js/viewmanager.js"></script>
 		<script type="text/javascript" src="js/log.js"></script>
 		<script type="text/javascript" src="js/view.js"></script>
 		<script type="text/javascript" src="js/views/slowestqueries.js"></script>
@@ -29,16 +30,14 @@
 	<body>
 		<div id="head">
 			<div>
-				<div id="FileSelector">
+				<div id="Menu">
 					<select id="FileSelect">
 						<option>- Select -</option>
 					</select>
-				</div>
-				<div id="LogStats">
-				</div>
-				<div id="ViewSelector">
 					<select id="ViewSelect">
 					</select>
+				</div>
+				<div id="LogStats">
 				</div>
 			</div>
 			<div id="graph">

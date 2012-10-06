@@ -27,13 +27,16 @@ viewer.View.prototype.load = function (log) {
 viewer.View.prototype._calculate = function () {
 };
 
-viewer.View.prototype.display = function () {
-	this._initMenu();
-
-	this._display();
+viewer.View.prototype.show = function () {
 };
 
-viewer.View.prototype._display = function () {
+viewer.View.prototype.generate = function () {
+	this._initMenu();
+
+	this._generate();
+};
+
+viewer.View.prototype._generate = function () {
 };
 
 viewer.View.prototype.setParams = function (params) {
@@ -110,6 +113,12 @@ viewer.View.prototype._showDetail = function ($el) {
 	var query = $row.data('Query');
 
 	setTimeout(function () {
-		viewer.selectView('QueryDetail', {'Query': query});
+		viewer.man.displayView(viewer.QueryDetailView, {'Query': query});
 	}, 0);
+};
+
+viewer.View.prototype._highlightCode = function () {
+	this._$container.find('pre.sh_sql').each(function () {
+		sh_highlightElement(this, sh_languages['sql']);
+	});
 };
