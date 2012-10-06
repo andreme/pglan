@@ -12,6 +12,14 @@ viewer.LogStatsView.prototype = new viewer.View();
 
 //viewer.views['LogStats'] = {'Caption': 'Stats', 'Class': viewer.LogStatsView};
 
+viewer.LogStatsView.prototype.getFirstDate = function () {
+	return new Date(this._first * 1000);
+};
+
+viewer.LogStatsView.prototype.getLastDate = function () {
+	return new Date(this._last * 1000);
+};
+
 viewer.LogStatsView.prototype._calculate = function () {
 	this._statementCount = 0;
 	this._uniqueStatementCount = this._log.getUniqueStatementCount();
@@ -53,6 +61,6 @@ viewer.LogStatsView.prototype._display = function () {
 	$tmpl.find('[data-name=StatementCount]').text(formatNumber(this._statementCount));
 	$tmpl.find('[data-name=UniqueStatementCount]').text(formatNumber(this._uniqueStatementCount));
 	$tmpl.find('[data-name=Duration]').text(formatDuration(this._time / 1000));
-	$tmpl.find('[data-name=First]').text(formatDateTime(new Date(this._first * 1000)));
-	$tmpl.find('[data-name=Last]').text(formatDateTime(new Date(this._last * 1000)));
+	$tmpl.find('[data-name=First]').text(formatDateTime(this.getFirstDate()));
+	$tmpl.find('[data-name=Last]').text(formatDateTime(this.getLastDate()));
 };

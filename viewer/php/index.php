@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>PG Logfile viewer</title>
 
 		<link rel="stylesheet" type="text/css" href="css/viewer.css" />
@@ -14,6 +14,9 @@
 		<script type="text/javascript" src="js/vendor/jquery.ui.prettypiemenu.js"></script>
 		<script type="text/javascript" src="js/vendor/sh_main.js"></script>
 		<script type="text/javascript" src="js/vendor/sh_sql.js"></script>
+		<script type="text/javascript" src="js/vendor/flot/jquery.flot.js"></script>
+		<script type="text/javascript" src="js/vendor/flot/jquery.flot.selection.js"></script>
+		<script type="text/javascript" src="js/vendor/flot/jquery.flot.resize.js"></script>
 		<script type="text/javascript" src="js/funcs.js"></script>
 		<script type="text/javascript" src="js/viewer.js"></script>
 		<script type="text/javascript" src="js/log.js"></script>
@@ -38,7 +41,10 @@
 					</select>
 				</div>
 			</div>
-			<div id="graph"></div>
+			<div id="graph">
+				<div id="GraphCont"></div>
+				<div id="GraphOverview"></div>
+			</div>
 		</div>
 		<div id="main">
 			<div id="View"></div>

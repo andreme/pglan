@@ -1,3 +1,16 @@
+
+/* layout */
+
+#GraphCont {
+	height: 100px;
+}
+
+#GraphOverview {
+	height: 40px;
+}
+
+/* queryList */
+
 table.queryList td, table.queryList th {
     padding: 2px;
 }
