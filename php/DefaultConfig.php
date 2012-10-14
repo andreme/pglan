@@ -7,7 +7,9 @@ class DefaultConfig {
 	public $MaxParamSize = 10240; // 10 kb
 
 	public function init() {
-		$this->DataPath = __DIR__.'/../data/';
+		if (empty($this->DataPath)) {
+			$this->DataPath = __DIR__.'/../data/';
+		}
 	}
 
 	public static function create() {
