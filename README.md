@@ -6,6 +6,15 @@ It works in two steps, first the log file is parsed and stored in a JSON data fi
 
 Queries are normalised, multiple calls to the same SQL with different values are added up, depending on the view.
 
+Features
+====
+
+- Logfile only needs to be parsed once.
+- Different views to analyse data.
+- Copy SQL command to EXPLAIN the SQL with PREPARE if required (bind variables).
+
+[Screenshots available here](https://github.com/andreme/pglan/wiki/Screenshots)
+
 Installation
 ====
 1. Extract [zip](https://github.com/andreme/pglan/zipball/master) or clone this repository.
@@ -21,4 +30,4 @@ Usage
 3. The View list gives the option to select a different view.
 4. Right click on a SQL yields a context menu:
 	- Detail: shows all calls for this SQL.
-	- Analyse: A dialog to copy the SQL to run [EXPLAIN](http://www.postgresql.org/docs/devel/static/sql-explain.html) (with prepare if the SQL has bind variables)
+	- Analyse: A dialog to copy the SQL to run [EXPLAIN](http://www.postgresql.org/docs/current/static/sql-explain.html).
