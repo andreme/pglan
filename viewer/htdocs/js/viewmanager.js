@@ -27,6 +27,8 @@ viewer.ViewManager.prototype.displayView = function (classname, params) {
 		return;
 	}
 
+	this._updateCurrentHistory();
+
 	var step = {};
 
 	step['Container'] = $('<div></div>');
@@ -43,6 +45,16 @@ viewer.ViewManager.prototype.displayView = function (classname, params) {
 	this._display(this._history.length-1);
 };
 
+viewer.ViewManager.prototype._updateCurrentHistory = function () {
+	if (!this._history.length) {
+		return;
+	}
+
+	var step = this._history[this._history.length-1];
+
+	step['PageXPos'] = $(window).scrollTop();
+};
+
 viewer.ViewManager.prototype._display = function (index) {
 	var step = this._history[index];
 
@@ -51,4 +63,6 @@ viewer.ViewManager.prototype._display = function (index) {
 	this._$container.append(step['Container']);
 
 	step['Instance'].show();
+
+	$(window).scrollTop(step['PageXPos'] || 0);
 };
