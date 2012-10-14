@@ -10,6 +10,7 @@ Features
 ====
 
 - Logfile only needs to be parsed once.
+- Parse gzipped (.gz) or bzipped (.bz2) log files.
 - Different views to analyse data.
 - Copy SQL command to EXPLAIN the SQL with PREPARE if required (bind variables).
 
