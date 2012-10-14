@@ -12,7 +12,9 @@ class JSONWriter extends Writer {
 
 	protected function doWrite() {
 		$handle = fopen($this->filename, 'w');
-
+		if ($handle === false) {
+			die("Could not open output file: {$this->filename}");
+		}
 		fwrite($handle, '{"log": {');
 
 		$this->writeTypes($handle);
