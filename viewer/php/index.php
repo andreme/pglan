@@ -31,10 +31,10 @@
 		<div id="head">
 			<div>
 				<div id="Menu">
-					<select id="FileSelect">
+					File <select id="FileSelect">
 						<option>- Select -</option>
 					</select>
-					<select id="ViewSelect">
+					View <select id="ViewSelect">
 					</select>
 				</div>
 				<div id="LogStats">

@@ -9,6 +9,12 @@
 	height: 40px;
 }
 
+/* stats view */
+
+.LogStats > span {
+    font-weight: bold;
+}
+
 /* queryList */
 
 table.queryList td, table.queryList th {
