@@ -2,7 +2,7 @@
 viewer.QueryDetailView = function ($container) {
 	viewer.View.call(this, $container);
 
-	this._maxQueries = 1000;
+	this._maxQueries = 500;
 
 	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
 
