@@ -41,29 +41,29 @@ class PgLogParser extends Parser {
 	protected function inspectLine() {
 		if ($this->isStartOfLogEntry()) {
 
-			$this->logger->debug('Is Start Of Log Entry, Level: '.$this->start[4]);
+			$this->logger->debug('Is Start Of Log Entry, Level: '.$this->start['level']);
 
-			switch ($this->start[4]) {
+			switch ($this->start['level']) {
 				case 'LOG':
 					if ($this->isDuration()) {
-						$this->logger->debug('Is Duration, Type: '.$this->duration[3]);
-						switch ($this->duration[3]) {
+						$this->logger->debug('Is Duration, Type: '.$this->duration['type']);
+						switch ($this->duration['type']) {
 							case 'statement':
-								$this->logger->debug('Dur3: '.$this->duration[4]);
-								if (beginsWith($this->duration[4], ': DEALLOCATE')) {
+								$this->logger->debug('Dur3: '.$this->duration['remainder']);
+								if (beginsWith($this->duration['remainder'], ': DEALLOCATE')) {
 									return true; // ignore
 								}
 								// fallthrough here
 							case 'execute':
-								if (beginsWith($this->duration[4], ': COPY ')) {
+								if (beginsWith($this->duration['remainder'], ': COPY ')) {
 									$this->startSQLEntry('');
 									$this->entry->setDummy(true); // ignore these
 									return true; // ignore backups
 								}
 
 								$sql = null;
-								if (preg_match('/^[^:]*:\s?(.*)$/i', $this->duration[4], $sql)) {
-									$this->startSQLEntry($sql[1], $this->durationToMS($this->duration[1], $this->duration[2]));
+								if (preg_match('/^[^:]*:\s?(.*)$/i', $this->duration['remainder'], $sql)) {
+									$this->startSQLEntry($sql[1], $this->durationToMS($this->duration['time'], $this->duration['timeunit']));
 									return true;
 								} else {
 									return false;
@@ -74,15 +74,15 @@ class PgLogParser extends Parser {
 								$this->entry->setDummy(true); // ignore these
 								return true;
 						}
-					} elseif ($this->isSystemMessage($this->start[5])) {
+					} elseif ($this->isSystemMessage($this->start['remainder'])) {
 						return true;
 					}
 				case 'DETAIL':
-					if ($this->isParameters($this->start[5])) {
+					if ($this->isParameters($this->start['remainder'])) {
 						return true;
 					}
 				case 'FATAL':
-					if ($this->isSystemMessage($this->start[5])) {
+					if ($this->isSystemMessage($this->start['remainder'])) {
 						return true;
 					}
 			}
@@ -102,8 +102,7 @@ class PgLogParser extends Parser {
 	}
 
 	protected function isStartOfLogEntry() {
-		// 1 = datetime, 2 = user, 3 = db, 4 = level, 5 = rest of line
-		if (preg_match("/^(\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)(?: [a-z]{3})?\s+([^\s]*)?\s?([^\s]*)?\s(LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):[\s]+(.*)$/i", // (?:[0-9XPFDBLA]{2}[0-9A-Z]{3}:[\s]+)?
+		if (preg_match("/^(?<datetime>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)(?: [a-z]{3})?\s+(?<user>[^\s]*)?\s?(?<db>[^\s]*)?\s(?<level>LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):[\s]+(?<remainder>.*)$/i",
 			$this->line, $this->start)) {
 
 			return true;
@@ -112,10 +111,9 @@ class PgLogParser extends Parser {
 	}
 
 	protected function isDuration() {
-		// 1 = duration, 2 = duration (unit), 3 = type, 4 = rest of line
-		$this->logger->debug('Trying to match duration: '.$this->start[5]);
-		if (preg_match("/^duration:\s+([\d\.]+)\s(sec|ms|us)[\s]+([^\s:]+)\s*(.*)$/i", // (?:[0-9XPFDBLA]{2}[0-9A-Z]{3}:[\s]+)?
-			$this->start[5], $this->duration)) {
+		$this->logger->debug('Trying to match duration: '.$this->start['remainder']);
+		if (preg_match("/^duration:\s+(?<time>[\d\.]+)\s(?<timeunit>sec|ms|us)[\s]+(?<type>[^\s:]+)\s*(?<remainder>.*)$/i",
+			$this->start['remainder'], $this->duration)) {
 
 			return true;
 		}
@@ -143,8 +141,8 @@ class PgLogParser extends Parser {
 	private function startSQLEntry($sql, $duration = null) {
 		$this->endEntry();
 
-		$this->entry = new SQLLogEntry($this->start[1].' UTC', $this->start[2],
-			$this->start[3], $this->start[4], $sql, $duration);
+		$this->entry = new SQLLogEntry($this->start['datetime'].' UTC', $this->start['user'],
+			$this->start['db'], $this->start['level'], $sql, $duration);
 	}
 
 	private function endEntry() {
@@ -167,8 +165,8 @@ class PgLogParser extends Parser {
 		) {
 			$this->endEntry();
 
-			$this->entry = new SystemLogEntry($this->start[1], $this->start[2],
-				$this->start[3], $this->start[4], $line);
+			$this->entry = new SystemLogEntry($this->start['datetime'], $this->start['user'],
+				$this->start['db'], $this->start['level'], $line);
 			return true;
 		}
 
