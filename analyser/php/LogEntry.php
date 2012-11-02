@@ -2,10 +2,6 @@
 
 class LogEntry {
 
-	public static $maxParamSize;
-
-	protected $multiLine = false;
-
 	protected $dummy = false;
 
 	protected $datetime;
@@ -22,16 +18,12 @@ class LogEntry {
 	protected $params = array();
 
 	public function __construct($datetime, $user, $db, $level, $text, $duration = null) {
-		$this->datetime = strtotime($datetime);
+		$this->datetime = $datetime;
 		$this->user = $user;
 		$this->db = $db;
 		$this->level = $level;
 		$this->text = $text;
 		$this->duration = $duration;
-	}
-
-	public function isMultiLine() {
-		return $this->multiLine;
 	}
 
 	public function isDummy() {
@@ -43,10 +35,6 @@ class LogEntry {
 	}
 
 	public function addLine($line) {
-		if (!$this->multiLine) {
-			throw new DOMException();
-		}
-
 		$this->text .= "\n".$line;
 	}
 
@@ -62,10 +50,11 @@ class LogEntry {
 		return $this->hash;
 	}
 
+	public function setParams(array $params) {
+		$this->params = $params;
+	}
+
 	public function addParam($name, $value) {
-		if (strlen($value) > self::$maxParamSize) {
-			$value = 'BLOB replaced';
-		}
 		$this->params[$name] = $value;
 	}
 
@@ -75,6 +64,10 @@ class LogEntry {
 
 	public function getText() {
 		return $this->text;
+	}
+
+	public function setText($text) {
+		$this->text = $text;
 	}
 
 	public function getParams() {

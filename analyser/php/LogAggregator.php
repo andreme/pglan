@@ -10,6 +10,9 @@ class LogAggregator {
 	 */
 	public function addEntry($entry) {
 		/* @var $existingEntry LogObject */
+
+		$entry->finish();
+
 		$existingEntry = @$this->list[$entry->getType()][$entry->getHash()];
 
 		if ($existingEntry) {

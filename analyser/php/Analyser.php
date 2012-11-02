@@ -30,6 +30,12 @@ class Analyser {
 
 	/**
 	 *
+	 * @var LogLineParsers
+	 */
+	protected $parsers;
+
+	/**
+	 *
 	 * @var Parser
 	 */
 	protected $parser;
@@ -58,7 +64,7 @@ class Analyser {
 	protected function doAnalyse() {
 		$this->startTime = new DateTime();
 
-		$this->parser->parse();
+		$this->parser->parse($this->reader);
 
 		$this->writer->write();
 
@@ -79,11 +85,11 @@ class Analyser {
 
 		$this->initList();
 
+		$this->initParsers();
+
 		$this->initParser();
 
 		$this->initWriter();
-
-		LogEntry::$maxParamSize = $this->config->MaxParamSize;
 	}
 
 	protected function initConfig() {
@@ -94,7 +100,17 @@ class Analyser {
 
 	protected function initAutoload() {
 		spl_autoload_register(function ($class) {
-			require_once __DIR__."/$class.php";
+
+			$file = __DIR__;
+			if (file_exists("$file/lineparsers/$class.php")) {
+				$file .= "/lineparsers/$class.php";
+			} elseif (file_exists("$file/lineparts/$class.php")) {
+				$file .= "/lineparts/$class.php";
+			} else {
+				$file .= "/$class.php";
+			}
+
+			require_once $file;
 			return true;
 		});
 	}
@@ -116,12 +132,24 @@ class Analyser {
 		$this->list = new LogAggregator();
 	}
 
+	protected function initParsers() {
+		$this->parsers = new LogLineParsers();
+
+		$this->parsers->addParser(new NoMatchParser());
+		$this->parsers->addParser(new SystemMessageParser());
+		$this->parsers->addParser(new ParametersParser($this->config->MaxParamSize));
+		$this->parsers->addParser(new QueryParser());
+		$this->parsers->addParser(new DurationParser());
+		$this->parsers->addParser(new EntryStartParser());
+		$this->parsers->addParser(new BeginOfLineParser());
+	}
+
 	protected function initParser() {
-		if (PgSysLogParser::isSysLog($this->reader->getLine())) {
-			$this->parser = new PgSysLogParser($this->reader, $this->logger, $this->list);
-		} else {
-			$this->parser = new PgLogParser($this->reader, $this->logger, $this->list);
+		if (SysLogParser::isSysLog($this->reader->getLine())) {
+			$this->parsers->addParser(new SysLogParser());
 		}
+
+		$this->parser = new LogParser($this->parsers, $this->list);
 	}
 
 	protected function initWriter() {

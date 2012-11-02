@@ -10,7 +10,7 @@ class ParserTestAnalyser extends Analyser {
 
 		$this->init();
 
-		$this->parser->parse();
+		$this->parser->parse($this->reader);
 
 		$this->destruct();
 	}
@@ -23,6 +23,7 @@ class ParserTestAnalyser extends Analyser {
 		rewind($stream);
 
 		$this->reader->setHandle($stream);
+		$this->reader->nextLine();
 	}
 
 	private function destruct() {
@@ -60,8 +61,7 @@ class ParserTest extends PGLANTestCase {
 	}
 
 	public function testSkipBind() {
-		$log = "2012-07-11 20:42:32 EST u d LOG:  duration: 0.164 ms  bind pdo_stmt_00000001: SELECT $1
-2012-07-11 20:42:32 EST u d DETAIL:  parameters: $1 = '100002'";
+		$log = "2012-07-11 20:42:32 EST u d LOG:  duration: 0.164 ms  bind pdo_stmt_00000001: SELECT $1\n2012-07-11 20:42:32 EST u d DETAIL:  parameters: $1 = '100002'";
 
 		$this->analyser->parse($log);
 
@@ -111,8 +111,7 @@ class ParserTest extends PGLANTestCase {
 	}
 
 	public function testMultiLineQuery() {
-		$log = "2012-07-11 20:42:32 EST u d LOG:  duration: 0.295 ms  execute pdo_stmt_00000001: SELECT X
-FROM Y";
+		$log = "2012-07-11 20:42:32 EST u d LOG:  duration: 0.295 ms  execute pdo_stmt_00000001: SELECT X\nFROM Y";
 
 		$logEntry = $this->extractOneEntry($log);
 

@@ -2,7 +2,20 @@
 
 require_once __DIR__.'/../pglantestcase.php';
 
+require_once __DIR__.'/../../../php/helper.php';
+
 spl_autoload_register(function ($class) {
-	require_once __DIR__."/../../php/$class.php";
+
+	$file = __DIR__."/../../php";
+	if (file_exists("$file/lineparsers/$class.php")) {
+		$file .= "/lineparsers/$class.php";
+	} elseif (file_exists("$file/lineparts/$class.php")) {
+		$file .= "/lineparts/$class.php";
+	} else {
+		$file .= "/$class.php";
+	}
+
+	require_once $file;
+
 	return true;
 });

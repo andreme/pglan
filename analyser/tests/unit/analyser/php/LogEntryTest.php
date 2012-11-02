@@ -15,17 +15,13 @@ class LogEntryTest extends PGLANTestCase {
 	private $logEntry;
 
 	protected function setUp() {
-		$this->logEntry = new LogEntry(self::DATE, self::USER, self::DB, self::LEVEL, self::DEFAULT_TEXT, self::DURATION);
+		$this->logEntry = new LogEntry(strtotime(self::DATE), self::USER, self::DB, self::LEVEL, self::DEFAULT_TEXT, self::DURATION);
 	}
 
 	public function testIsDummy() {
 		$this->assertFalse($this->logEntry->isDummy());
 		$this->logEntry->setDummy(true);
 		$this->assertTrue($this->logEntry->isDummy());
-	}
-
-	public function testMultiLineDefaultsToFalse() {
-		$this->assertFalse($this->logEntry->isMultiLine());
 	}
 
 	public function testCalculateHash() {
@@ -68,12 +64,6 @@ class LogEntryTest extends PGLANTestCase {
 		$this->assertArrayHasKeyWithValue('DB', self::DB, $result);
 		$this->assertArrayHasKeyWithValue('Level', self::LEVEL, $result);
 		$this->assertArrayHasKeyWithValue('Hash', $this->logEntry->getHash(), $result);
-	}
-
-	public function testCanNotAddLineIfNotMultiline() {
-		$this->setExpectedException('DOMException');
-
-		$this->logEntry->addLine('');
 	}
 
 }

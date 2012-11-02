@@ -12,7 +12,7 @@ class Reader {
 
 	public function nextLine() {
 		$this->line = fgets($this->handle);
-		$this->eof = $this->line === false;
+		$this->eof = ($this->line === false);
 		if (!$this->eof) {
 			$this->lineNo++;
 		}
