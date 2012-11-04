@@ -26,6 +26,9 @@ class ParserTestAnalyser extends Analyser {
 		$this->reader->nextLine();
 	}
 
+	protected function initWriter() {
+	}
+
 	private function destruct() {
 		fclose($this->reader->getHandle());
 	}

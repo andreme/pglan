@@ -154,7 +154,10 @@ class Analyser {
 	}
 
 	protected function initWriter() {
-		$this->writer = new JSONWriter($this->list, $this->config->DataPath.basename($this->filename).'.json');
+
+		$filename = $this->config->DataPath.basename($this->reader->getStrippedFileName()).'.json';
+
+		$this->writer = new JSONWriter($this->list, $filename);
 	}
 
 	protected function end() {
