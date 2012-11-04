@@ -7,6 +7,7 @@ class LogParserTest extends PGLANTestCase {
 	const LOGLINE_MULTILINE = "2012-10-14 21:39:48 EST LOG:  duration: 2.0 ms  statement: select z\nfrom test";
 	const LOGLINE_MULTILINE_WITH_EMPTY_LINE = "2012-10-14 21:39:48 EST LOG:  duration: 2.0 ms  statement: select z\n\nfrom test";
 	const LOGLINE_PARAMETER = "2012-10-14 21:39:48 EST LOG:  duration: 2.0 ms  statement: select 3\n2012-10-14 21:39:48 EST DETAIL:  parameters: $1 = 'A'";
+	const LOGLINE_CHECKPOINT = "2012-10-14 21:39:48 EST LOG:  checkpoint complete: wrote 1563 buffers (0.4%); 0 transaction log file(s) added, 0 removed, 0 recycled; write=269.905 s, sync=0.003 s, total=269.909 s; sync files=45, longest=0.000 s, average=0.000 s";
 
 	/**
 	 * @var LogParser
@@ -130,7 +131,7 @@ class LogParserTest extends PGLANTestCase {
 		$this->assertEquals("select z\n\nfrom test", $logObject->getEntry()->getText());
 	}
 
-	public function testQueryWithParamtersParse() {
+	public function testQueryWithParametersParse() {
 
 		$reader = $this->createReader(self::LOGLINE_PARAMETER);
 
@@ -151,6 +152,23 @@ class LogParserTest extends PGLANTestCase {
 		/* @var $queryEntries SQLLogEntry */
 
 		$this->assertArrayHasKeyWithValue("$1", "'A'", $logObject->getEntry()->getParams());
+	}
+
+	public function testParseCheckpoint() {
+
+		$reader = $this->createReader(self::LOGLINE_CHECKPOINT);
+
+		$this->parsers->addParser(new CheckpointParser());
+		$this->parsers->addParser(new EntryStartParser());
+		$this->parsers->addParser(new BeginOfLineParser());
+
+		$this->logParser->parse($reader);
+
+		$queryEntries = $this->entries->getEntries('Checkpoint');
+		reset($queryEntries);
+		$entry = current($queryEntries);
+
+		$this->assertInstanceOf("CheckpointEntry", $entry);
 	}
 
 }

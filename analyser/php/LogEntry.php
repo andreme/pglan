@@ -2,6 +2,8 @@
 
 class LogEntry {
 
+	protected $aggregatable = true;
+
 	protected $dummy = false;
 
 	protected $datetime;
@@ -79,19 +81,23 @@ class LogEntry {
 	}
 
 	public function getExportData() {
-		$result = array(
+		$result = array_filter(array(
 			'Text' => $this->text,
 			'User' => $this->user,
 			'DB' => $this->db,
 			'Level' => $this->level,
 			'Hash' => $this->hash,
-		);
+		));
 
 		return $result;
 	}
 
 	public function getType() {
 		throw new BadMethodCallException();
+	}
+
+	public function canAggregate() {
+		return $this->aggregatable;
 	}
 
 }

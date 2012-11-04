@@ -137,6 +137,7 @@ class Analyser {
 
 		$this->parsers->addParser(new NoMatchParser());
 		$this->parsers->addParser(new SystemMessageParser());
+		$this->parsers->addParser(new CheckpointParser());
 		$this->parsers->addParser(new ParametersParser($this->config->MaxParamSize));
 		$this->parsers->addParser(new QueryParser());
 		$this->parsers->addParser(new DurationParser());

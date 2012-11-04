@@ -13,15 +13,19 @@ class LogAggregator {
 
 		$entry->finish();
 
-		$existingEntry = @$this->list[$entry->getType()][$entry->getHash()];
+		if ($entry->canAggregate()) {
+			$existingEntry = @$this->list[$entry->getType()][$entry->getHash()];
 
-		if ($existingEntry) {
-			$existingEntry->addEvent($entry);
-		} else {
-			if (!isset($this->list[$entry->getType()])) {
-				$this->list[$entry->getType()] = array();
+			if ($existingEntry) {
+				$existingEntry->addEvent($entry);
+			} else {
+				if (!isset($this->list[$entry->getType()])) {
+					$this->list[$entry->getType()] = array();
+				}
+				$this->list[$entry->getType()][$entry->getHash()] = new LogObject($entry);
 			}
-			$this->list[$entry->getType()][$entry->getHash()] = new LogObject($entry);
+		} else {
+			$this->list[$entry->getType()][] = $entry;
 		}
 	}
 
