@@ -7,6 +7,7 @@ class QueryParserTest extends PGLANTestCase {
 	const LINE_PARSE = 'parse pdo_stmt_00000001: SELECT 1';
 	const LINE_BIND = 'bind pdo_stmt_00000001: SELECT $1';
 	const LINE_DEALLOCATE = 'statement: DEALLOCATE pdo_stmt_00000001';
+	const LINE_EMPTY = 'statement:';
 	const LINE_NORMALISE = "parse pdo_stmt_00000001: SELECT 1, 'A'";
 
 	/**
@@ -79,6 +80,16 @@ class QueryParserTest extends PGLANTestCase {
 		$part = $line->getPart('Query');
 		$this->assertInstanceOf('QueryPart', $part);
 		$this->assertTrue($line->getIgnoreEntry());
+	}
+
+	public function testParseFirstLineCanBeEmpty() {
+
+		$line = $this->setupLine(self::LINE_EMPTY);
+
+		$this->parser->parse($line);
+
+		$part = $line->getPart('Query');
+		$this->assertInstanceOf('QueryPart', $part);
 	}
 
 	public function testParseQueryText() {

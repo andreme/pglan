@@ -22,7 +22,7 @@ class QueryParser extends LogLinePartParser implements MultiLineParser {
 
 		$matches = null;
 
-		if (ematch("/^(?<type>statement):\s+(?<text>.*)$/i", $logLine->getRemainder(), $matches)
+		if (ematch("/^(?<type>statement):\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)
 				or ematch("/^(?<type>execute|parse|bind) [^:]*:\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)
 				) {
 
