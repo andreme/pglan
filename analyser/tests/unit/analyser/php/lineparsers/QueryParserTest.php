@@ -8,7 +8,7 @@ class QueryParserTest extends PGLANTestCase {
 	const LINE_BIND = 'bind pdo_stmt_00000001: SELECT $1';
 	const LINE_DEALLOCATE = 'statement: DEALLOCATE pdo_stmt_00000001';
 	const LINE_EMPTY = 'statement:';
-	const LINE_NORMALISE = "parse pdo_stmt_00000001: SELECT 1, 'A'";
+	const LINE_NORMALISE = "parse pdo_stmt_00000001: SELECT 1, 'A' FROM Z WHERE A IN (22)";
 
 	/**
 	 * @var QueryParser
@@ -146,9 +146,12 @@ class QueryParserTest extends PGLANTestCase {
 
 		$this->assertEquals(PARSER_MULTLINE_ACTION_FINISH_PENDING, $this->parser->parseNextLine($currentLine, null));
 
-		$this->assertCount(2, $currentLine->getEntry()->getParams());
+		$this->assertCount(3, $currentLine->getEntry()->getParams());
 		$this->assertArrayHasKeyWithValue('$A', "'A'", $currentLine->getEntry()->getParams());
 		$this->assertArrayHasKeyWithValue('$B', "1", $currentLine->getEntry()->getParams());
+		$this->assertArrayHasKeyWithValue('$C', "22", $currentLine->getEntry()->getParams());
+
+		$this->assertRegExp('/SELECT \$\w, \$\w FROM Z WHERE A IN \(\$\w\)/i', $currentLine->getEntry()->getText());
 	}
 
 	public function testParseWithParameters() {
