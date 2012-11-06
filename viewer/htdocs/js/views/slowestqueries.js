@@ -59,6 +59,7 @@ viewer.SlowestQueriesView.prototype._generate = function () {
 		$row.data('Event', this['Event']);
 
 		$row.find('[data-name=Rank]').text(i+1);
+		$row.find('[data-name=DateTime]').text(formatDateTime(new Date(this['Event']['DateTime'] * 1000)));
 		$row.find('[data-name=Duration]').text((this['Event']['Duration'] / 1000).toFixed(2));
 		$row.find('[data-name=Query]').text(replaceSQLParams(this['Query']['Text'], this['Event']['Params']));
 
