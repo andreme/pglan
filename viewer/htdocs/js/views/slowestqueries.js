@@ -26,8 +26,9 @@ viewer.SlowestQueriesView.prototype._addQueryEvent = function (query, event) {
 
 		if ((event['Duration'] || 0) > (this._queries[i]['Event']['Duration'] || 0)) {
 			this._queries.splice(i, 0, {'Query': query, 'Event': event});
+			this._onQueryAdded(query, event);
 
-			if (len >= this._maxQueries) {
+			if (this._queries.length >= this._maxQueries) {
 				this._queries.splice(this._maxQueries, 999);
 			}
 
@@ -37,9 +38,11 @@ viewer.SlowestQueriesView.prototype._addQueryEvent = function (query, event) {
 
 	if (len < this._maxQueries) {
 		this._queries.push({'Query': query, 'Event': event});
-	} else if (len > this._maxQueries) {
-		this._queries.splice(this._maxQueries, 999);
+		this._onQueryAdded(query, event);
 	}
+};
+
+viewer.SlowestQueriesView.prototype._onQueryAdded = function (query, event) {
 };
 
 viewer.SlowestQueriesView.prototype._generate = function () {
