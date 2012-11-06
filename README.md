@@ -1,6 +1,6 @@
 What is pglan?
 ====
-A PostgresSQL Log File Analyser written in PHP.
+A PostgreSQL Log File Analyser written in PHP.
 
 It works in two steps, first the log file is parsed and stored in a JSON data file. Then this file can be loaded in the web based viewer and looked at with different views.
 
