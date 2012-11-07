@@ -63,6 +63,14 @@ function formatDateTime(d) {
 		(d.getUTCHours() < 10 ? '0' : '')+d.getUTCHours()+':'+(d.getUTCMinutes() < 10 ? '0' : '')+d.getUTCMinutes()+':'+(d.getUTCSeconds() < 10 ? '0' : '') + d.getUTCSeconds();
 }
 
+function formatDate(d) {
+	return d.getUTCFullYear()+'-'+(d.getMonth() < 9 ? '0' : '')+(d.getMonth() + 1)+'-'+(d.getUTCDate() < 10 ? '0' : '') +d.getUTCDate();
+}
+
+function formatTime(d) {
+	return (d.getUTCHours() < 10 ? '0' : '')+d.getUTCHours()+':'+(d.getUTCMinutes() < 10 ? '0' : '')+d.getUTCMinutes()+':'+(d.getUTCSeconds() < 10 ? '0' : '') + d.getUTCSeconds();
+}
+
 function replaceSQLParams(s, params) {
 
 	if (!params) {

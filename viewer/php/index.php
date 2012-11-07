@@ -26,6 +26,7 @@
 		<script type="text/javascript" src="js/views/slowestqueries.js"></script>
 		<script type="text/javascript" src="js/views/slowestqueriesunique.js"></script>
 		<script type="text/javascript" src="js/views/logstats.js"></script>
+		<script type="text/javascript" src="js/views/hourlystats.js"></script>
 		<script type="text/javascript" src="js/views/querydetail.js"></script>
 	</head>
 	<body>
