@@ -59,12 +59,12 @@ function formatNumber(number) {
 }
 
 function formatDateTime(d) {
-	return d.getUTCFullYear()+'-'+(d.getMonth() < 9 ? '0' : '')+(d.getMonth() + 1)+'-'+(d.getUTCDate() < 10 ? '0' : '') +d.getUTCDate()+' '+
+	return d.getUTCFullYear()+'-'+(d.getUTCMonth() < 9 ? '0' : '')+(d.getUTCMonth() + 1)+'-'+(d.getUTCDate() < 10 ? '0' : '') +d.getUTCDate()+' '+
 		(d.getUTCHours() < 10 ? '0' : '')+d.getUTCHours()+':'+(d.getUTCMinutes() < 10 ? '0' : '')+d.getUTCMinutes()+':'+(d.getUTCSeconds() < 10 ? '0' : '') + d.getUTCSeconds();
 }
 
 function formatDate(d) {
-	return d.getUTCFullYear()+'-'+(d.getMonth() < 9 ? '0' : '')+(d.getMonth() + 1)+'-'+(d.getUTCDate() < 10 ? '0' : '') +d.getUTCDate();
+	return d.getUTCFullYear()+'-'+(d.getUTCMonth() < 9 ? '0' : '')+(d.getUTCMonth() + 1)+'-'+(d.getUTCDate() < 10 ? '0' : '') +d.getUTCDate();
 }
 
 function formatTime(d) {
