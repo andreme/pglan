@@ -2,7 +2,7 @@
 viewer.QueryDetailView = function ($container) {
 	viewer.View.call(this, $container);
 
-	this._maxQueries = 500;
+	this._maxQueries = 25;
 
 	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
 
@@ -37,8 +37,11 @@ viewer.QueryDetailView.prototype._generate = function () {
 
 	var $orow = this._$container.find('.Row').detach();
 
+	var $tbody = this._$container.find('tbody');
+
 	var i = 0;
-	$.each(this._events.slice(0, this._maxQueries), function () {
+
+	var addFunc = function () {
 
 		var $row = $orow.clone();
 		$row.data('Query', self._query);
@@ -51,8 +54,20 @@ viewer.QueryDetailView.prototype._generate = function () {
 		$row.find('[data-name=Duration]').text((this['Duration'] / 1000).toFixed(2));
 		$row.find('[data-name=Query]').text(replaceSQLParams(self._query['Text'], this['Params']));
 
-		$row.appendTo(self._$container.find('tbody'));
-	});
+		$row.appendTo($tbody);
+	};
+
+	if (this._events.length <= this._maxQueries) {
+		$.each(this._events, addFunc);
+	} else {
+		$.each(this._events.slice(0, this._maxQueries), addFunc);
+
+		var $cut  = $('<tr><td colspan="99">'+(this._events.length-this._maxQueries)+' queries hidden.</td></tr>')
+		$tbody.append($cut);
+
+		i = this._events.length-this._maxQueries;
+		$.each(this._events.slice(-this._maxQueries), addFunc);
+	}
 
 	self._$container.find('table').on('contextmenu', 'td', null, function (e) {
 		return self._clickMenuEvent(e);
