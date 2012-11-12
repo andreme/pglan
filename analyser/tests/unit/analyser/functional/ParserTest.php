@@ -10,6 +10,8 @@ class ParserTestAnalyser extends Analyser {
 
 		$this->init();
 
+		$this->initReader();
+
 		$this->parser->parse($this->reader);
 
 		$this->destruct();

@@ -2,7 +2,7 @@
 
 class Analyser {
 
-	private $filename;
+	private $filenames;
 
 	/**
 	 *
@@ -49,8 +49,10 @@ class Analyser {
 	private $startTime;
 	private $endTime;
 
-	public function __construct($filename) {
-		$this->filename = $filename;
+	private $outputfilename;
+
+	public function __construct($filenames) {
+		$this->filenames = $filenames;
 	}
 
 	public function analyse() {
@@ -64,7 +66,18 @@ class Analyser {
 	protected function doAnalyse() {
 		$this->startTime = new DateTime();
 
-		$this->parser->parse($this->reader);
+		foreach ($this->filenames as $filename) {
+
+			$this->initReader($filename);
+
+			if (!$this->outputfilename) {
+				$this->outputfilename = $this->reader->getStrippedFileName();
+			}
+
+			$this->parser->parse($this->reader);
+		}
+
+		$this->initWriter();
 
 		$this->writer->write();
 
@@ -81,15 +94,11 @@ class Analyser {
 
 		$this->initLogger();
 
-		$this->initReader();
-
 		$this->initList();
 
 		$this->initParsers();
 
 		$this->initParser();
-
-		$this->initWriter();
 	}
 
 	protected function initConfig() {
@@ -115,12 +124,17 @@ class Analyser {
 		});
 	}
 
-	protected function initReader() {
-		$this->reader = new FileReader($this->filename);
+	protected function initReader($filename) {
+		$this->reader = new FileReader($filename);
 		$this->reader->init();
 
 		while (($this->reader->getLine() === '') and !$this->reader->isEof()) {
 			$this->reader->nextLine();
+		}
+
+		$this->parsers->removeParser('SysLogParser');
+		if (SysLogParser::isSysLog($this->reader->getLine())) {
+			$this->parsers->addParser(new SysLogParser());
 		}
 	}
 
@@ -146,16 +160,13 @@ class Analyser {
 	}
 
 	protected function initParser() {
-		if (SysLogParser::isSysLog($this->reader->getLine())) {
-			$this->parsers->addParser(new SysLogParser());
-		}
 
 		$this->parser = new LogParser($this->parsers, $this->list);
 	}
 
 	protected function initWriter() {
 
-		$filename = $this->config->DataPath.basename($this->reader->getStrippedFileName()).'.json';
+		$filename = $this->config->DataPath.basename($this->outputfilename).'.json';
 
 		$this->writer = new JSONWriter($this->list, $filename);
 	}

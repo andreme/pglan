@@ -30,4 +30,23 @@ class LogLineParsers {
 		return false;
 	}
 
+	public function hasParser($class) {
+		foreach ($this->parsers as $parser) {
+			if ($parser instanceof $class) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public function removeParser($class) {
+		foreach ($this->parsers as $key => $parser) {
+			if ($parser instanceof $class) {
+				unset($this->parsers[$key]);
+				return;
+			}
+		}
+	}
+
 }

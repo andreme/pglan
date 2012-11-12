@@ -41,4 +41,27 @@ class LogLineParsersTest extends PGLANTestCase {
 		$this->assertFalse($this->parsers->parse($line));
 	}
 
+	public function testHasParserReturnsTrueWhenFindingParser() {
+		$parser = new BeginOfLineParser();
+
+		$this->parsers->addParser($parser);
+
+		$this->assertTrue($this->parsers->hasParser('BeginOfLineParser'));
+	}
+
+	public function testHasParserReturnsFalseWhenNotFindingParser() {
+
+		$this->assertFalse($this->parsers->hasParser('X'));
+	}
+
+	public function testRemoveParserRemovesParser() {
+		$parser = new BeginOfLineParser();
+
+		$this->parsers->addParser($parser);
+
+		$this->parsers->removeParser('BeginOfLineParser');
+
+		$this->assertFalse($this->parsers->hasParser('BeginOfLineParser'));
+	}
+
 }
