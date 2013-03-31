@@ -2,8 +2,6 @@
 viewer.MostTimeView = function ($container) {
 	viewer.View.call(this, $container);
 
-	this._maxQueries = 50;
-
 	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
 	this._menu.push({'Caption': 'Detail', 'Click': this._showDetail, 'Icon': 'ui-icon-zoomin'});
 
@@ -33,7 +31,7 @@ viewer.MostTimeView.prototype._calculate = function () {
 		return result;
 	});
 
-	this._queries = q.slice(0, this._maxQueries);
+	this._queries = q.slice(0, viewer.MAX_QUERIES_VISIBLE);
 };
 
 viewer.MostTimeView.prototype._addQueryEvent = function (query, event) {

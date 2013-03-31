@@ -28,6 +28,7 @@
 		<script type="text/javascript" src="js/views/logstats.js"></script>
 		<script type="text/javascript" src="js/views/hourlystats.js"></script>
 		<script type="text/javascript" src="js/views/querydetail.js"></script>
+		<script type="text/javascript" src="js/views/allqueries.js"></script>
 	</head>
 	<body>
 		<div id="head">

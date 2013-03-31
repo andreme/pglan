@@ -12,6 +12,8 @@ viewer.statsView = null;
 viewer.LOG_TYPE_QUERY = 'Query';
 viewer.LOG_TYPE_SYSTEM = 'System';
 
+viewer.MAX_QUERIES_VISIBLE = 50;
+
 viewer.start = function () {
 	$('#Templates').load('templates.html');
 

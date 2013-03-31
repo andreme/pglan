@@ -2,8 +2,6 @@
 viewer.SlowestQueriesView = function ($container) {
 	viewer.View.call(this, $container);
 
-	this._maxQueries = 50;
-
 	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
 	this._menu.push({'Caption': 'Detail', 'Click': this._showDetail, 'Icon': 'ui-icon-zoomin'});
 
@@ -28,15 +26,15 @@ viewer.SlowestQueriesView.prototype._addQueryEvent = function (query, event) {
 			this._queries.splice(i, 0, {'Query': query, 'Event': event});
 			this._onQueryAdded(query, event);
 
-			if (this._queries.length >= this._maxQueries) {
-				this._queries.splice(this._maxQueries, 999);
+			if (this._queries.length >= viewer.MAX_QUERIES_VISIBLE) {
+				this._queries.splice(viewer.MAX_QUERIES_VISIBLE, 9999);
 			}
 
 			return;
 		}
 	}
 
-	if (len < this._maxQueries) {
+	if (len < viewer.MAX_QUERIES_VISIBLE) {
 		this._queries.push({'Query': query, 'Event': event});
 		this._onQueryAdded(query, event);
 	}

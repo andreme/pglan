@@ -2,7 +2,6 @@
 viewer.HourlyStatsView = function ($container) {
 	viewer.View.call(this, $container);
 
-
 	this._hours = {};
 };
 viewer.HourlyStatsView.prototype = new viewer.View();

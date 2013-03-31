@@ -2,8 +2,6 @@
 viewer.QueryDetailView = function ($container) {
 	viewer.View.call(this, $container);
 
-	this._maxQueries = 25;
-
 	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
 
 	this._query = null;
@@ -57,16 +55,16 @@ viewer.QueryDetailView.prototype._generate = function () {
 		$row.appendTo($tbody);
 	};
 
-	if (this._events.length <= this._maxQueries) {
+	if (this._events.length <= viewer.MAX_QUERIES_VISIBLE) {
 		$.each(this._events, addFunc);
 	} else {
-		$.each(this._events.slice(0, this._maxQueries), addFunc);
+		$.each(this._events.slice(0, viewer.MAX_QUERIES_VISIBLE / 2), addFunc);
 
-		var $cut  = $('<tr><td colspan="99">'+(this._events.length-this._maxQueries)+' queries hidden.</td></tr>')
+		var $cut = $('<tr><td colspan="99">'+(this._events.length-viewer.MAX_QUERIES_VISIBLE)+' queries hidden.</td></tr>')
 		$tbody.append($cut);
 
-		i = this._events.length-this._maxQueries;
-		$.each(this._events.slice(-this._maxQueries), addFunc);
+		i = this._events.length-(viewer.MAX_QUERIES_VISIBLE / 2);
+		$.each(this._events.slice(-(viewer.MAX_QUERIES_VISIBLE / 2)), addFunc);
 	}
 
 	self._$container.find('table').on('contextmenu', 'td', null, function (e) {
