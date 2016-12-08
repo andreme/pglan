@@ -14,7 +14,7 @@ class EntryStartParser extends LogLinePartParser {
 
 		$matches = null;
 
-		if (ematch("/^(?<datetime>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)(?: [a-z]{3})?(?:\s(?<user>[^\s]*))?(?:\s(?<db>[^\s]*))?\s(?<level>LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):\s+(?<remainder>.*)$/i",
+		if (ematch("/^(?<datetime>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)(?: [a-z]{3,4})??(?:\s(?<user>[^\s]*))?(?:\s(?<db>[^\s]*))?\s(?<level>LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):\s+(?<remainder>.*)$/i",
 				$logLine->getRemainder(), $matches)) {
 
 			$logLine->addPart(new LogTimePart($matches['datetime'].' UTC'));

@@ -27,7 +27,7 @@ class Reader {
 	}
 
 	public function __destruct() {
-		fclose($this->handle);
+		$this->handle and fclose($this->handle);
 	}
 
 	public function getLineNo() {

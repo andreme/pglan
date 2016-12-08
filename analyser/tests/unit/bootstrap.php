@@ -11,9 +11,11 @@ spl_autoload_register(function ($class) {
 		$file .= "/lineparsers/$class.php";
 	} elseif (file_exists("$file/lineparts/$class.php")) {
 		$file .= "/lineparts/$class.php";
+	} elseif (file_exists("$file/$class.php")) {
+ 		$file .= "/$class.php";
 	} else {
-		$file .= "/$class.php";
-	}
+		return;
+ 	}
 
 	require_once $file;
 

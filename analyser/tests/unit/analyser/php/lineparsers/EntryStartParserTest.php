@@ -5,6 +5,7 @@ class EntryStartParserTest extends PGLANTestCase {
 	const LOGLINE = '2012-10-14 21:39:48 LOG:  X';
 	const LOGLINE_WITH_CONNECTION = '2012-10-14 21:39:48 USER DB LOG:  X';
 	const LOGLINE_TZ = '2012-10-14 21:39:48 EST LOG:  X';
+	const LOGLINE_4CHAR_TZ = '2012-10-14 21:39:48 AEST LOG:  X';
 
 	/**
 	 * @var LogTimeParser
@@ -66,6 +67,15 @@ class EntryStartParserTest extends PGLANTestCase {
 	public function testIgnoreTZWhenParsing() {
 
 		$line = $this->setupLine(self::LOGLINE_TZ);
+
+		$this->assertTrue($this->parser->parse($line));
+
+		$this->assertEquals(strtotime('2012-10-14 21:39:48 UTC'), $line->getPart('LogTime')->getTimestamp());
+	}
+
+	public function test4CharTZ() {
+
+		$line = $this->setupLine(self::LOGLINE_4CHAR_TZ);
 
 		$this->assertTrue($this->parser->parse($line));
 

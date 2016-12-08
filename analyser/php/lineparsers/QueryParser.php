@@ -127,7 +127,7 @@ class QueryParser extends LogLinePartParser implements MultiLineParser {
 	private function replaceSQLValues() {
 		$patterns = array(
 			"/('[^']*')/", // strings
-			"/([^a-zA-Z_\$-\d])(-?\d[\d\.]*)/", // numbers
+			"/([^a-zA-Z_\$\-\d])(\-?\d[\d\.]*)/", // numbers
 		);
 
 		$this->finalisingEntry->setText(preg_replace_callback($patterns, array($this, 'replaceSQLValuesAddParam'), $this->finalisingEntry->getText()));
