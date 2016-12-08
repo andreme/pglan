@@ -32,7 +32,6 @@ class ParserTestAnalyser extends Analyser {
 	}
 
 	private function destruct() {
-		fclose($this->reader->getHandle());
 	}
 
 	/**
@@ -142,6 +141,17 @@ class ParserTest extends PGLANTestCase {
 		$this->assertCount(1, $params);
 
 		$this->assertArrayHasKeyWithValue('$1', '100002', $params);
+	}
+
+	public function testQueryWithDurationLoggedOnSecondLine() {
+		$log = "2016-12-08 22:34:54 AWST u d LOG:  statement: SELECT * from public.x(45)
+2016-12-08 22:34:56 AWST u d LOG:  duration: 2064.956 ms
+";
+
+		$logEntry = $this->extractOneEntry($log);
+		$this->assertEquals(2064.956, $logEntry->getDuration());
+		
+		$params = $this->extractParams($log);
 	}
 
 	public function testNormaliseNumber() {

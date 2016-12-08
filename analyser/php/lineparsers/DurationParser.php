@@ -14,7 +14,7 @@ class DurationParser extends LogLinePartParser {
 
 		$matches = null;
 
-		if (ematch("/^duration:\s+(?<duration>[\d\.]+)\s(?<unit>sec|ms|us)[\s]+(?<remainder>.*)$/i",
+		if (ematch("/^duration:\s+(?<duration>[\d\.]+)\s(?<unit>sec|ms|us)[\s]*(?<remainder>.*)$/i",
 				$logLine->getRemainder(), $matches)) {
 
 			$logLine->addPart(new DurationPart($matches['duration'], $matches['unit']));

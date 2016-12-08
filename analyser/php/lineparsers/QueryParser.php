@@ -16,10 +16,6 @@ class QueryParser extends LogLinePartParser implements MultiLineParser {
 	 */
 	public function parse($logLine) {
 
-		if (!($logLine->getLastPart() instanceof DurationPart)) {
-			return false;
-		}
-
 		$matches = null;
 
 		if (ematch("/^(?<type>statement):\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)
@@ -106,6 +102,14 @@ class QueryParser extends LogLinePartParser implements MultiLineParser {
 			/* @var $entry SQLLogEntry */
 
 			$entry->setParams($nextLogLine->getLastPart()->getParams());
+
+			return PARSER_MULTLINE_ACTION_SKIP_NEXT;
+		}
+
+		if ($nextLogLine and ($nextLogLine->getLastPart() instanceof DurationPart)) {
+			$entry = $currentLogLine->getEntry();
+			/* @var $entry SQLLogEntry */
+			$entry->setDuration($nextLogLine->getLastPart()->getDurationInMS());
 
 			return PARSER_MULTLINE_ACTION_SKIP_NEXT;
 		}

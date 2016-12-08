@@ -76,6 +76,10 @@ class LogEntry {
 		return $this->params;
 	}
 
+	public function setDuration($duration) {
+		$this->duration = $duration;
+	}
+
 	public function getDuration() {
 		return $this->duration;
 	}
