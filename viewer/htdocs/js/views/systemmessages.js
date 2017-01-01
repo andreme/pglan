@@ -1,41 +1,38 @@
 
-viewer.AllQueriesView = function ($container) {
+viewer.SystemMessagesView = function ($container) {
 	viewer.View.call(this, $container);
 
-	this._menu.push({'Caption': 'Analyse', 'Click': this._showAnalyse, 'Icon': 'ui-icon-lightbulb'});
-	this._menu.push({'Caption': 'Detail', 'Click': this._showDetail, 'Icon': 'ui-icon-zoomin'});
+//	this._menu.push({'Caption': 'Detail', 'Click': this._showDetail, 'Icon': 'ui-icon-zoomin'});
 
-	this._queries = [];
+	this._messages = [];
 };
-viewer.AllQueriesView.prototype = new viewer.View();
+viewer.SystemMessagesView.prototype = new viewer.View();
 
-viewer.views['AllQueries'] = {'Caption': 'All Queries', 'Class': viewer.AllQueriesView};
+viewer.views['SystemMessages'] = {'Caption': 'System Messages', 'Class': viewer.SystemMessagesView};
 
-viewer.AllQueriesView.prototype._calculate = function () {
-	this._log.walkEvents(viewer.LOG_TYPE_QUERY, this._addQueryEvent, this);
+viewer.SystemMessagesView.prototype._calculate = function () {
+	this._log.walkEvents(viewer.LOG_TYPE_SYSTEM, this._addSystemEvent, this);
 
-	this._queries.sort(function (a, b) {
+	this._messages.sort(function (a, b) {
 		return a['Event']['DateTime'] - b['Event']['DateTime'];
 	});
 };
 
-viewer.AllQueriesView.prototype._addQueryEvent = function (query, event) {
-	this._queries.push({'Query': query, 'Event': event});
+viewer.SystemMessagesView.prototype._addSystemEvent = function (message, event) {
+	this._messages.push({'Message': message, 'Event': event});
 };
 
-viewer.AllQueriesView.prototype._generate = function () {
+viewer.SystemMessagesView.prototype._generate = function () {
 	this._createTable(Math.floor(viewer.statsView.getFirstDate().valueOf() / 1000),
 		Math.ceil(viewer.statsView.getLastDate().valueOf() / 1000));
 
 	this._createGraph();
 };
 
-viewer.AllQueriesView.prototype._createTable = function (start, end) {
-	var self = this;
-
+viewer.SystemMessagesView.prototype._createTable = function (start, end) {
 	this._$container.die().empty();
 
-	var tmpl = $('#Templates .QueryDetail').clone();
+	var tmpl = $('#Templates .MessageList').clone();
 
 	var $orow = tmpl.find('.Row').detach();
 
@@ -43,58 +40,49 @@ viewer.AllQueriesView.prototype._createTable = function (start, end) {
 
 	var i = 0;
 
-	var filteredQueries = $.map(this._queries, function (a) {
+	var filteredMessages = $.map(this._messages, function (a) {
 		return (a['Event']['DateTime'] >= start && a['Event']['DateTime'] <= end) ? a : null;
 	});
 
 	var addFunc = function () {
-		var query = this['Query'];
+		var message = this['Message'];
 		var event = this['Event'];
 
 		var $row = $orow.clone();
-		$row.data('Query', query);
+		$row.data('Message', message);
 		$row.data('Event', event);
 
 		var dateTime = new Date(event['DateTime'] * 1000);
 
 		$row.find('[data-name=No]').text(++i);
 		$row.find('[data-name=DateTime]').text(formatDateTime(dateTime));
-		$row.find('[data-name=Duration]').text((event['Duration'] / 1000).toFixed(2));
-		$row.find('[data-name=Query]').text(replaceSQLParams(query['Text'], event['Params']));
+		$row.find('[data-name=Message]').text(replaceSQLParams(message['Text'], event['Params']));
 
 		$row.appendTo($tbody);
 	};
 
-	if (filteredQueries.length <= viewer.MAX_QUERIES_VISIBLE) {
-		$.each(filteredQueries, addFunc);
+	if (filteredMessages.length <= viewer.MAX_MESSAGES_VISIBLE) {
+		$.each(filteredMessages, addFunc);
 	} else {
-		$.each(filteredQueries.slice(0, viewer.MAX_QUERIES_VISIBLE), addFunc);
+		$.each(filteredMessages.slice(0, viewer.MAX_MESSAGES_VISIBLE), addFunc);
 
-		var $cut = $('<tr><td colspan="99">'+(filteredQueries.length-viewer.MAX_QUERIES_VISIBLE)+' queries hidden.</td></tr>')
+		var $cut = $('<tr><td colspan="99">'+(filteredMessages.length-viewer.MAX_MESSAGES_VISIBLE)+' messages hidden.</td></tr>')
 		$tbody.append($cut);
 
-		i = filteredQueries.length-viewer.MAX_QUERIES_VISIBLE;
-		$.each(filteredQueries.slice(-viewer.MAX_QUERIES_VISIBLE), addFunc);
+		i = filteredMessages.length-viewer.MAX_MESSAGES_VISIBLE;
+		$.each(filteredMessages.slice(-viewer.MAX_MESSAGES_VISIBLE), addFunc);
 	}
 
 	tmpl.appendTo(this._$container);
-
-	self._$container.find('table').on('contextmenu', 'td', null, function (e) {
-		return self._clickMenuEvent(e);
-	});
-
-	this._$container.find('button.Back').remove();
-
-	this._highlightCode();
 };
 
-viewer.AllQueriesView.prototype._createGraph = function () {
+viewer.SystemMessagesView.prototype._createGraph = function () {
 	var self = this;
 
 	var d = [];
 
-	$.each(this._queries, function () {
-		d.push([this['Event']['DateTime'] * 1000, this['Event']['Duration'] / 1000]);
+	$.each(this._messages, function () {
+		d.push([this['Event']['DateTime'] * 1000, 0]);
 	});
 
     var options = {

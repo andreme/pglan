@@ -18,8 +18,9 @@ viewer.Log.prototype.walkEvents = function (type, func, context) {
 
 viewer.Log.prototype.getUniqueStatementCount = function () {
 	var result = 0;
-	$.each(this._data['log'], function () {
-		result += this.length;
-	});
+	if (this._data['log']['Query']) {
+		result = this._data['log']['Query'].length;
+	}
+
 	return result;
 };

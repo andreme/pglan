@@ -13,6 +13,7 @@ viewer.LOG_TYPE_QUERY = 'Query';
 viewer.LOG_TYPE_SYSTEM = 'System';
 
 viewer.MAX_QUERIES_VISIBLE = 50;
+viewer.MAX_MESSAGES_VISIBLE = 500;
 
 viewer.start = function () {
 	$('#Templates').load('templates.html');

@@ -10,8 +10,6 @@ viewer.LogStatsView = function ($container) {
 };
 viewer.LogStatsView.prototype = new viewer.View();
 
-//viewer.views['LogStats'] = {'Caption': 'Stats', 'Class': viewer.LogStatsView};
-
 viewer.LogStatsView.prototype.getFirstDate = function () {
 	return new Date(this._first * 1000);
 };
@@ -28,12 +26,6 @@ viewer.LogStatsView.prototype._calculate = function () {
 	this._last = null;
 
 	this._log.walkEvents(viewer.LOG_TYPE_QUERY, this._addQueryEvent, this);
-	this._log.walkEvents(viewer.LOG_TYPE_SYSTEM, this._addSystemEvent, this);
-};
-
-viewer.LogStatsView.prototype._addSystemEvent = function (query, event) {
-
-	this._statementCount++;
 };
 
 viewer.LogStatsView.prototype._addQueryEvent = function (query, event) {

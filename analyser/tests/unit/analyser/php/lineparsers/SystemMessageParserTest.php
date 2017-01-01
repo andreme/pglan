@@ -4,6 +4,7 @@ class SystemMessageParserTest extends PGLANTestCase {
 
 	const LINE_DB_STARTUP = 'the database system is starting up';
 	const LINE_AUTOVAC_STARTED = 'autovacuum launcher started';
+	const LINE_WAL_MISSING = 'requested WAL segment 00000001000000850000001A has already been removed';
 
 	/**
 	 * @var SystemMessageParser
@@ -34,9 +35,19 @@ class SystemMessageParserTest extends PGLANTestCase {
 		$this->assertInstanceOf('SystemMessagePart', $part);
 	}
 
-	public function testParseExecute() {
+	public function testParseAutoVavStarted() {
 
 		$line = $this->setupLine(self::LINE_AUTOVAC_STARTED);
+
+		$this->parser->parse($line);
+
+		$part = $line->getPart('SystemMessage');
+		$this->assertInstanceOf('SystemMessagePart', $part);
+	}
+
+	public function testParseWALMissing() {
+
+		$line = $this->setupLine(self::LINE_WAL_MISSING);
 
 		$this->parser->parse($line);
 

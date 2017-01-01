@@ -12,26 +12,40 @@ class SystemMessageParser extends LogLinePartParser {
 			return false;
 		}
 
-		if (!in_array($lastPart->getLevel(), array('FATAL', 'LOG'))) {
+		if (!in_array($lastPart->getLevel(), ['FATAL', 'LOG', 'ERROR'])) {
 			return false;
 		}
 
-		if (in_array($logLine->getRemainder(), array(
-			'the database system is starting up',
-			'autovacuum launcher started',
-		))) {
-			$logLine->addPart($msgPart = new SystemMessagePart($logLine->getRemainder()));
+		if (!$this->isSystemMessage($logLine->getRemainder())) {
+			return false;
+		}
+		
+		$logLine->addPart($msgPart = new SystemMessagePart($logLine->getRemainder()));
 
-			$logLine->setRemainder(false);
+		$logLine->setRemainder(false);
 
-			$logLine->setEntry($this->createEntry($logLine));
+		$logLine->setEntry($this->createEntry($logLine));
 
+		return true;
+	}
+
+	private function isSystemMessage($text) {
+		
+		if ($text == 'the database system is starting up') {
+			return true;
+		}
+		
+		if ($text == 'autovacuum launcher started') {
 			return true;
 		}
 
+		if (preg_match('/^requested WAL segment [\dA-F]{24} has already been removed$/i', $text)) {
+			return true;
+		}
+		
 		return false;
 	}
-
+	
 	/**
 	 *
 	 * @param LogLine $logLine
