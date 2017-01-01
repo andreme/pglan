@@ -49,7 +49,7 @@ viewer.QueryDetailView.prototype._generate = function () {
 
 		$row.find('[data-name=No]').text(++i);
 		$row.find('[data-name=DateTime]').text(formatDateTime(dateTime));
-		$row.find('[data-name=Duration]').text((this['Duration'] / 1000).toFixed(2));
+		$row.find('[data-name=Duration]').text((this['Duration'] === undefined || this['Duration'] === null) ? '' : (this['Duration'] / 1000).toFixed(2));
 		$row.find('[data-name=Query]').text(replaceSQLParams(self._query['Text'], this['Params']));
 
 		$row.appendTo($tbody);

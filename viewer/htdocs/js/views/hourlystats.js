@@ -59,8 +59,8 @@ viewer.HourlyStatsView.prototype._generate = function () {
 			oldDate = formatDate(this['DateTime']);
 		}
 		$row.find('[data-name=Time]').text(formatTime(this['DateTime']));
-		$row.find('[data-name=Duration]').text(formatDuration((this['Duration'] / 1000)));
-		$row.find('[data-name=Count]').text((this['Count']).toFixed(0));
+		$row.find('[data-name=Duration]').text(formatDuration(((this['Duration'] || 0) / 1000)));
+		$row.find('[data-name=Count]').text(formatNumber((this['Count']).toFixed(0)));
 
 		$row.appendTo(self._$container.find('tbody'));
 	});

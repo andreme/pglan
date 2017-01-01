@@ -16,15 +16,13 @@ class QueryParser extends LogLinePartParser implements MultiLineParser {
 	 */
 	public function parse($logLine) {
 
-		$matches = null;
+		$matches = $this->getMatches($logLine);
 
-		if (ematch("/^(?<type>statement):\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)
-				or ematch("/^(?<type>execute|parse|bind) [^:]*:\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)
-				) {
+		if ($matches) {
 
 			$logLine->addPart(new QueryPart($matches['type'], $matches['text']));
 
-			if (in_array($matches['type'], array('parse', 'bind'))) {
+			if (in_array($matches['type'], ['parse', 'bind'])) {
 				$logLine->setIgnoreEntry(true);
 			}
 
@@ -42,6 +40,33 @@ class QueryParser extends LogLinePartParser implements MultiLineParser {
 		}
 
 		return false;
+	}
+	
+	/**
+	 *
+	 * @param LogLine $logLine
+	 */
+	private function getMatches($logLine) {
+		$matches = null;
+		
+		if (ematch("/^(?<type>statement):\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)) {
+			return $matches;
+		}
+				
+		if (ematch("/^(?<type>execute|parse|bind) [^:]*:\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)) {
+			return $matches;
+		}
+
+		if (($logLevel = $logLine->getPart('LogLevel'))) {
+			if ($logLevel->getLevel() == 'STATEMENT') {
+				return [
+					'type' => 'statement',
+					'text' => $logLine->getRemainder(),
+				];
+			}
+		}
+
+		return null;
 	}
 
 	/**

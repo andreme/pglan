@@ -7,6 +7,14 @@ function bytesToSize(bytes) {
 }
 
 function formatDuration(seconds) {
+	if (seconds === null || seconds === undefined || seconds === '' || isNaN(seconds)) {
+		return null;
+	}
+
+	if (seconds === 0) {
+		return '0s';
+	}
+
 	//seconds = Math.round(seconds);
 
 	var minutes = Math.floor(seconds / 60);

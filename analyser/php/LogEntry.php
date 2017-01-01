@@ -104,4 +104,21 @@ class LogEntry {
 		return $this->aggregatable;
 	}
 
+	public function getEventData() {
+
+		$event = [
+			'DateTime' => $this->getDatetime(),
+		];
+
+		if ($this->getParams()) {
+			$event['Params'] = $this->getParams();
+		}
+
+		if ($this->getDuration() !== 0) {
+			$event['Duration'] = $this->getDuration();
+		}
+
+		return $event;		
+	}
+
 }

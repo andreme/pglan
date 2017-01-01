@@ -59,7 +59,7 @@ viewer.AllQueriesView.prototype._createTable = function (start, end) {
 
 		$row.find('[data-name=No]').text(++i);
 		$row.find('[data-name=DateTime]').text(formatDateTime(dateTime));
-		$row.find('[data-name=Duration]').text((event['Duration'] / 1000).toFixed(2));
+		$row.find('[data-name=Duration]').text((event['Duration'] === undefined || event['Duration'] === null) ? '' : (event['Duration'] / 1000).toFixed(2));
 		$row.find('[data-name=Query]').text(replaceSQLParams(query['Text'], event['Params']));
 
 		$row.appendTo($tbody);

@@ -160,6 +160,7 @@ class Analyser {
 		$this->parsers->addParser(new CheckpointParser());
 		$this->parsers->addParser(new ParametersParser($this->config->MaxParamSize));
 		$this->parsers->addParser(new QueryParser());
+		$this->parsers->addParser(new TemporaryFileParser());
 		$this->parsers->addParser(new DurationParser());
 		$this->parsers->addParser(new EntryStartParser());
 		$this->parsers->addParser(new BeginOfLineParser());

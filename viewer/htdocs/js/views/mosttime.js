@@ -68,7 +68,7 @@ viewer.MostTimeView.prototype._generate = function () {
 
 		$row.find('[data-name=Rank]').text(++i);
 		$row.find('[data-name=TotalDuration]').text(formatDuration((this['TotalDuration'] / 1000)));
-		$row.find('[data-name=Count]').text((this['Count']).toFixed(0));
+		$row.find('[data-name=Count]').text(formatNumber((this['Count']).toFixed(0)));
 		$row.find('[data-name=AvgDuration]').text((this['TotalDuration'] / this['Count'] / 1000).toFixed(2));
 		$row.find('[data-name=Query]').text(replaceSQLParams(this['Query']['Text'], this['Slowest']['Params']));
 

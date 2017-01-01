@@ -31,6 +31,7 @@
 		<script type="text/javascript" src="js/views/allqueries.js"></script>
 		<script type="text/javascript" src="js/views/systemmessages.js"></script>
 		<script type="text/javascript" src="js/views/checkpoints.js"></script>
+		<script type="text/javascript" src="js/views/tempfiles.js"></script>
 	</head>
 	<body>
 		<div id="head">

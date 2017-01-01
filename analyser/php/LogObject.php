@@ -4,7 +4,7 @@ class LogObject {
 
 	private $entry;
 
-	private $events = array();
+	private $events = [];
 
 	/**
 	 *
@@ -21,20 +21,7 @@ class LogObject {
 	 * @param LogEntry $entry
 	 */
 	public function addEvent($entry) {
-
-		$event = array(
-			'DateTime' => $entry->getDatetime(),
-		);
-
-		if ($entry->getParams()) {
-			$event['Params'] = $entry->getParams();
-		}
-
-		if ($entry->getDuration()) {
-			$event['Duration'] = $entry->getDuration();
-		}
-
-		$this->events[] = $event;
+		$this->events[] = $entry->getEventData();
 	}
 
 	public function jsonSerialize() {
