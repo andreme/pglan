@@ -1,36 +1,32 @@
 
-viewer.SystemMessagesView = function ($container) {
+viewer.CheckpointsView = function ($container) {
 	viewer.View.call(this, $container);
 
-	this._messages = [];
+	this._checkpoints = [];
 };
-viewer.SystemMessagesView.prototype = new viewer.View();
+viewer.CheckpointsView.prototype = new viewer.View();
 
-viewer.views['SystemMessages'] = {'Caption': 'System Messages', 'Class': viewer.SystemMessagesView};
+viewer.views['Checkpoints'] = {'Caption': 'Check points', 'Class': viewer.CheckpointsView};
 
-viewer.SystemMessagesView.prototype._calculate = function () {
-	this._log.walkEvents(viewer.LOG_TYPE_SYSTEM, this._addSystemEvent, this);
+viewer.CheckpointsView.prototype._calculate = function () {
+	this._checkpoints = this._log.getCheckpoints();
 
-	this._messages.sort(function (a, b) {
-		return a['Event']['DateTime'] - b['Event']['DateTime'];
+	this._checkpoints.sort(function (a, b) {
+		return a['DateTime'] - b['DateTime'];
 	});
 };
 
-viewer.SystemMessagesView.prototype._addSystemEvent = function (message, event) {
-	this._messages.push({'Message': message, 'Event': event});
-};
-
-viewer.SystemMessagesView.prototype._generate = function () {
+viewer.CheckpointsView.prototype._generate = function () {
 	this._createTable(Math.floor(viewer.statsView.getFirstDate().valueOf() / 1000),
 		Math.ceil(viewer.statsView.getLastDate().valueOf() / 1000));
 
 	this._createGraph();
 };
 
-viewer.SystemMessagesView.prototype._createTable = function (start, end) {
+viewer.CheckpointsView.prototype._createTable = function (start, end) {
 	this._$container.die().empty();
 
-	var tmpl = $('#Templates .MessageList').clone();
+	var tmpl = $('#Templates .CheckpointList').clone();
 
 	var $orow = tmpl.find('.Row').detach();
 
@@ -38,49 +34,49 @@ viewer.SystemMessagesView.prototype._createTable = function (start, end) {
 
 	var i = 0;
 
-	var filteredMessages = $.map(this._messages, function (a) {
-		return (a['Event']['DateTime'] >= start && a['Event']['DateTime'] <= end) ? a : null;
+	var filteredCheckpoints = $.map(this._checkpoints, function (a) {
+		return (a['DateTime'] >= start && a['DateTime'] <= end) ? a : null;
 	});
 
 	var addFunc = function () {
-		var message = this['Message'];
-		var event = this['Event'];
-
 		var $row = $orow.clone();
-		$row.data('Message', message);
-		$row.data('Event', event);
+		$row.data('Checkpoint', this);
 
-		var dateTime = new Date(event['DateTime'] * 1000);
+		var dateTime = new Date(this['DateTime'] * 1000);
 
 		$row.find('[data-name=No]').text(++i);
 		$row.find('[data-name=DateTime]').text(formatDateTime(dateTime));
-		$row.find('[data-name=Message]').text(replaceSQLParams(message['Text'], event['Params']));
+		$row.find('[data-name=BuffersWritten]').text(this['BuffersWritten']);
+		$row.find('[data-name=BuffersPercentage]').text(formatNumberDec(this['BuffersPercentage'], 1));
+		$row.find('[data-name=WriteTime]').text(formatNumberDec(this['WriteTime'], 3));
+		$row.find('[data-name=SyncTime]').text(formatNumberDec(this['SyncTime'], 3));
+		$row.find('[data-name=TotalTime]').text(formatNumberDec(this['TotalTime'], 3));
 
 		$row.appendTo($tbody);
 	};
 
-	if (filteredMessages.length <= viewer.MAX_MESSAGES_VISIBLE) {
-		$.each(filteredMessages, addFunc);
+	if (filteredCheckpoints.length <= viewer.MAX_MESSAGES_VISIBLE) {
+		$.each(filteredCheckpoints, addFunc);
 	} else {
-		$.each(filteredMessages.slice(0, viewer.MAX_MESSAGES_VISIBLE), addFunc);
+		$.each(filteredCheckpoints.slice(0, viewer.MAX_MESSAGES_VISIBLE), addFunc);
 
-		var $cut = $('<tr><td colspan="99">'+(filteredMessages.length-viewer.MAX_MESSAGES_VISIBLE)+' messages hidden.</td></tr>')
+		var $cut = $('<tr><td colspan="99">'+(filteredCheckpoints.length-viewer.MAX_MESSAGES_VISIBLE)+' messages hidden.</td></tr>')
 		$tbody.append($cut);
 
-		i = filteredMessages.length-viewer.MAX_MESSAGES_VISIBLE;
-		$.each(filteredMessages.slice(-viewer.MAX_MESSAGES_VISIBLE), addFunc);
+		i = filteredCheckpoints.length-viewer.MAX_MESSAGES_VISIBLE;
+		$.each(filteredCheckpoints.slice(-viewer.MAX_MESSAGES_VISIBLE), addFunc);
 	}
 
 	tmpl.appendTo(this._$container);
 };
 
-viewer.SystemMessagesView.prototype._createGraph = function () {
+viewer.CheckpointsView.prototype._createGraph = function () {
 	var self = this;
 
 	var d = [];
 
-	$.each(this._messages, function () {
-		d.push([this['Event']['DateTime'] * 1000, 0]);
+	$.each(this._checkpoints, function () {
+		d.push([this['DateTime'] * 1000, this['TotalTime']]);
 	});
 
     var options = {

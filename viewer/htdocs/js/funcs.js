@@ -58,6 +58,25 @@ function formatNumber(number) {
 	return x1 + x2;
 }
 
+function formatNumberDec(number, length) {
+	if (number === undefined || number === null || number === '' || isNaN(number)) {
+		return '';
+	}
+
+	var nStr = number+'';
+	var x = nStr.split('.');
+	var x1 = x[0];
+	var x2 = '.' + (x[1] || '0');
+	while (x2.length < length + 1) {
+		x2 += '0';
+	}
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, '$1,$2');
+	}
+	return x1 + x2;
+}
+
 function formatDateTime(d) {
 	return d.getUTCFullYear()+'-'+(d.getUTCMonth() < 9 ? '0' : '')+(d.getUTCMonth() + 1)+'-'+(d.getUTCDate() < 10 ? '0' : '') +d.getUTCDate()+' '+
 		(d.getUTCHours() < 10 ? '0' : '')+d.getUTCHours()+':'+(d.getUTCMinutes() < 10 ? '0' : '')+d.getUTCMinutes()+':'+(d.getUTCSeconds() < 10 ? '0' : '') + d.getUTCSeconds();

@@ -30,6 +30,7 @@
 		<script type="text/javascript" src="js/views/querydetail.js"></script>
 		<script type="text/javascript" src="js/views/allqueries.js"></script>
 		<script type="text/javascript" src="js/views/systemmessages.js"></script>
+		<script type="text/javascript" src="js/views/checkpoints.js"></script>
 	</head>
 	<body>
 		<div id="head">
