@@ -10,6 +10,11 @@ class TemporaryFileParser extends LogLinePartParser implements MultiLineParser {
 
 	private $replacedValues = array();
 
+
+	public function canParse($logLine) {
+		return preg_match('/^temporary file: path/i', $logLine->getRemainder());
+	}
+
 	/**
 	 *
 	 * @param LogLine $logLine
@@ -17,7 +22,6 @@ class TemporaryFileParser extends LogLinePartParser implements MultiLineParser {
 	public function parse($logLine) {
 
 		$matches = null;
-
 		
 		if (ematch('/^temporary file: path "(?<file>.+)\.\d+", size (?<size>\d+)/i', $logLine->getRemainder(), $matches)) {
 			$logLine->addPart(new TemporaryFilePart($matches['file'], (int)$matches['size']));

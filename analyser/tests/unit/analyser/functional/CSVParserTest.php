@@ -100,6 +100,19 @@ EOT;
 		$this->assertCount(0, $logEntry->getParams());
 	}
 
+	public function testCopy() {
+		$log = <<<EOT
+2017-03-21 01:51:35.393 GMT,"user","db",10816,"10.69.90.52:59396",58d086f7.2a40,1,"COPY",2017-03-21 01:50:47 GMT,16/575414,0,LOG,00000,"duration: 2296.221 ms  statement: COPY tab FROM STDIN WITH CSV HEADER",,,,,,,,,"app"
+EOT;
+
+		$logEntry = $this->extractOneEntry($log);
+
+		$this->assertEquals(strtotime('2017-03-21 01:51:35 UTC'), $logEntry->getDatetime());
+		$this->assertEquals(2296.221, $logEntry->getDuration());
+		$this->assertEquals('COPY tab FROM STDIN WITH CSV HEADER', $logEntry->getText());
+		$this->assertCount(0, $logEntry->getParams());
+	}
+
 	public function testMultiLineQuery() {
 		$log = <<<EOT
 2017-03-21 01:51:35.393 GMT,"user","db",10816,"10.69.90.52:59396",58d086f7.2a40,1,"SELECT",2017-03-21 01:50:47 GMT,16/575414,0,LOG,00000,"duration: 19749.155 ms  execute a12: SELECT COUNT(*)
@@ -111,15 +124,15 @@ EOT;
 		$this->assertEquals("SELECT COUNT(*)\nFROM \"apps\"", $logEntry->getText());
 	}
 
-//// TODO link temp file to statement...
-////	public function testTemporaryFile() {
-////		$log = "2016-12-30 13:25:18 EST postgres palletwatch LOG:  temporary file: path \"base/pgsql_tmp/pgsql_tmp11684.0\", size 74366976
-////2016-12-30 13:25:18 EST u db STATEMENT:  CREATE temp table tbl as SELECT * FROM z(424)\nWHERE (((Lower(concat( r1, r_2, r3)) LIKE Lower('%34443%'))))";
-////
-////		$logEntry = $this->extractOneEntry($log, 1, 'Temp', 'TemporaryFileEntry');
-////
-////		$this->assertEquals("CREATE temp table tbl as SELECT * FROM z(424)\nWHERE (((Lower(concat( r1, r_2, r3)) LIKE Lower('%34443%'))))", $logEntry->getText());
-////	}
+	public function testTemporaryFile() {
+		$log = <<<EOT
+2017-03-22 02:13:57.152 GMT,"user","db",732,"10.69.90.52:21996",58d1d42c.2dc,13,"SELECT",2017-03-22 01:32:28 GMT,46/629813,0,LOG,00000,"temporary file: path ""base/pgsql_tmp/pgsql_tmp732.12"", size 17721624",,,,,,"SELECT 1",,,""
+EOT;
+
+		$logEntry = $this->extractOneEntry($log, 1, 'Temp', 'TemporaryFileEntry');
+
+		$this->assertEquals("SELECT 1", $logEntry->getText());
+	}
 
 	private function extractParams($log) {
 		$logEntry = $this->extractOneEntry($log);
