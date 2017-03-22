@@ -9,6 +9,15 @@ abstract class LogLinePartParser {
 	 */
 	public abstract function parse($logLine);
 
+	/**
+	 *
+	 * @param LogLine $logLine
+	 * @return Boolean
+	 */
+	public function canParse($logLine) {
+		return true;
+	}
+
 }
 
 interface MultiLineParser {

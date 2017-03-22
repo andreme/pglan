@@ -17,7 +17,7 @@ class LogLineParsersTest extends PGLANTestCase {
 
         $part = new LogLinePart('X');
 
-        $parser = $this->getMock('LogLinePartParser');
+        $parser = $this->getMock('LogLinePartParser', ['parse']);
 
         $parser->expects($this->once())
              ->method('parse')

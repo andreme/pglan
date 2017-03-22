@@ -8,12 +8,7 @@ class ParametersParser extends LogLinePartParser {
 		$this->maxParamSize = $maxParamSize;
 	}
 
-	/**
-	 *
-	 * @param LogLine $logLine
-	 */
-	public function parse($logLine) {
-
+	public function canParse($logLine) {
 		if (!(($lastPart = $logLine->getLastPart()) instanceof LogLevelPart)) {
 			return false;
 		}
@@ -21,12 +16,19 @@ class ParametersParser extends LogLinePartParser {
 			return false;
 		}
 
+		return preg_match('/^parameters: (.*)/', $logLine->getRemainder());
+	}
+
+	/**
+	 *
+	 * @param LogLine $logLine
+	 */
+	public function parse($logLine) {
+
 		$matches = null;
 
 		$params = null;
-		if (!ematch('/^parameters: (.*)/', $logLine->getRemainder(), $params)) {
-			return false;
-		}
+		ematch('/^parameters: (.*)/', $logLine->getRemainder(), $params);
 
 		$line = $params[1];
 

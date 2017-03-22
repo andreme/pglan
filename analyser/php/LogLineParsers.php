@@ -22,8 +22,10 @@ class LogLineParsers {
 		foreach ($this->parsers as $parser) {
 			/* @var $parser LogLinePartParser */
 
-			if (($parseResult = $parser->parse($logLine))) {
-				return $parseResult;
+			if ($parser->canParse($logLine)) {
+				if (($parseResult = $parser->parse($logLine))) {
+					return $parseResult;
+				}
 			}
 		}
 

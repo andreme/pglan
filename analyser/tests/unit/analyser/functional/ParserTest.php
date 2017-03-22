@@ -10,14 +10,16 @@ class ParserTestAnalyser extends Analyser {
 
 		$this->init();
 
-		$this->initReader();
+		$this->initReader('');
+
+		$this->initParser();
 
 		$this->parser->parse($this->reader);
 
 		$this->destruct();
 	}
 
-	protected function initReader() {
+	protected function initReader($filename) {
 		$this->reader = new Reader();
 
 		$stream = fopen("php://temp", 'r+');

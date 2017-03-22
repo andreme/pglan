@@ -48,12 +48,12 @@ class QueryParser extends LogLinePartParser implements MultiLineParser {
 	 */
 	private function getMatches($logLine) {
 		$matches = null;
-		
-		if (ematch("/^(?<type>statement):\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)) {
+
+		if (ematch("/^(?<type>statement):\s?(?<text>.*)$/is", $logLine->getRemainder(), $matches)) {
 			return $matches;
 		}
 				
-		if (ematch("/^(?<type>execute|parse|bind) [^:]*:\s?(?<text>.*)$/i", $logLine->getRemainder(), $matches)) {
+		if (ematch("/^(?<type>execute|parse|bind) [^:]*:\s?(?<text>.*)$/is", $logLine->getRemainder(), $matches)) {
 			return $matches;
 		}
 

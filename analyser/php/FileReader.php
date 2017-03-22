@@ -30,8 +30,8 @@ class FileReader extends Reader {
 		$this->nextLine();
 	}
 
-	public function getStrippedFilename() {
-		return preg_replace('/\.(bz2|gz)$/i', null, $this->filename);
+	public function getOutputName() {
+		return basename(preg_replace('/\.(bz2|gz)$/i', null, $this->filename));
 	}
 
 }

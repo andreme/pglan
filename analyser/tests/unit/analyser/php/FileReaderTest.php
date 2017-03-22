@@ -13,7 +13,7 @@ class FileReaderTest extends PGLANTestCase {
 	public function testRemoveExtensions($ext) {
 		$this->reader = new FileReader('test.log'.$ext);
 
-		$this->assertEquals('test.log', $this->reader->getStrippedFilename());
+		$this->assertEquals('test.log', $this->reader->getOutputName());
 	}
 
 	public function getExtensions() {

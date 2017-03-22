@@ -49,7 +49,7 @@ class Analyser {
 	private $startTime;
 	private $endTime;
 
-	private $outputfilename;
+	private $outputName;
 
 	public function __construct($filenames) {
 		$this->filenames = $filenames;
@@ -70,8 +70,10 @@ class Analyser {
 
 			$this->initReader($filename);
 
-			if (!$this->outputfilename) {
-				$this->outputfilename = $this->reader->getStrippedFileName();
+			$this->initParser($filename);
+
+			if (!$this->outputName) {
+				$this->outputName = $this->reader->getOutputName();
 			}
 
 			$this->parser->parse($this->reader);
@@ -97,8 +99,6 @@ class Analyser {
 		$this->initList();
 
 		$this->initParsers();
-
-		$this->initParser();
 	}
 
 	protected function initConfig() {
@@ -131,16 +131,21 @@ class Analyser {
 	}
 
 	protected function initReader($filename) {
-		$this->reader = new FileReader($filename);
-		$this->reader->init();
+		if ($this->isCSV($filename)) {
+			$this->reader = new CSVFileReader($filename);
+			$this->reader->init();
+		} else {
+			$this->reader = new FileReader($filename);
+			$this->reader->init();
 
-		while (($this->reader->getLine() === '') and !$this->reader->isEof()) {
-			$this->reader->nextLine();
-		}
+			while (($this->reader->getLine() === '') and !$this->reader->isEof()) {
+				$this->reader->nextLine();
+			}
 
-		$this->parsers->removeParser('SysLogParser');
-		if (SysLogParser::isSysLog($this->reader->getLine())) {
-			$this->parsers->addParser(new SysLogParser());
+			$this->parsers->removeParser('SysLogParser');
+			if (SysLogParser::isSysLog($this->reader->getLine())) {
+				$this->parsers->addParser(new SysLogParser());
+			}
 		}
 	}
 
@@ -166,14 +171,22 @@ class Analyser {
 		$this->parsers->addParser(new BeginOfLineParser());
 	}
 
-	protected function initParser() {
+	private function isCSV($filename) {
+		return preg_match('/\.csv/i', $filename);
+	}
 
-		$this->parser = new LogParser($this->parsers, $this->list);
+	protected function initParser($filename = null) {
+
+		if ($this->isCSV($filename)) {
+			$this->parser = new CSVLogParser([], $this->list);
+		} else {
+			$this->parser = new LogParser($this->parsers, $this->list);
+		}
 	}
 
 	protected function initWriter() {
 
-		$filename = $this->config->DataPath.basename($this->outputfilename).'.json';
+		$filename = $this->config->DataPath.$this->outputName.'.json';
 
 		$this->writer = new JSONWriter($this->list, $filename);
 	}

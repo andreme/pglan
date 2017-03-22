@@ -2,9 +2,9 @@
 
 class Reader {
 
-	private $eof = false;
+	protected $eof = false;
 
-	private $line;
+	protected $line;
 
 	private $handle;
 
@@ -15,11 +15,12 @@ class Reader {
 		$this->eof = ($this->line === false);
 		if (!$this->eof) {
 			$this->lineNo++;
+			$this->line = rtrim($this->line);
 		}
 	}
 
 	public function getLine() {
-		return rtrim($this->line);
+		return $this->line;
 	}
 
 	public function isEof() {
@@ -40,6 +41,10 @@ class Reader {
 
 	public function setHandle($handle) {
 		$this->handle = $handle;
+	}
+
+	public function getOutputName() {
+		throw new Exception('Not implemented');
 	}
 
 }

@@ -12,7 +12,7 @@ class LogParser {
 	 *
 	 * @var LogAggregator
 	 */
-	private $entries;
+	protected $entries;
 
 	private $pendingLines = array();
 
