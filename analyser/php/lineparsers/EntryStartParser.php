@@ -14,8 +14,11 @@ class EntryStartParser extends LogLinePartParser {
 
 		$matches = null;
 
-		if (ematch("/^(?<datetime>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)(?: [a-z]{3,4})??(?:\s(?<user>[^\s]*))?(?:\s(?<db>[^\s]*))?\s(?<level>LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):\s+(?<remainder>.*)$/i",
-				$logLine->getRemainder(), $matches)) {
+		$levels = "(?<level>LOG|DEBUG|CONTEXT|WARNING|ERROR|FATAL|PANIC|HINT|DETAIL|NOTICE|STATEMENT|INFO|LOCATION):\s+(?<remainder>.*)$";
+
+		if (ematch("/^(?<datetime>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d)(?: [a-z]{3,4})??(?:\s(?<user>[^\s]*))?(?:\s(?<db>[^\s]*))?\s$levels/i", $logLine->getRemainder(), $matches)
+			or ematch("/(?<datetime>\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d) UTC:([\d.\(\)]+)?:((?<user>[^@]+)@(?<db>[^:]+))?:\[\d+\]:$levels/i", $logLine->getRemainder(), $matches)
+				) {
 
 			$logLine->addPart(new LogTimePart($matches['datetime'].' UTC'));
 

@@ -6,6 +6,7 @@ class EntryStartParserTest extends PGLANTestCase {
 	const LOGLINE_WITH_CONNECTION = '2012-10-14 21:39:48 USER DB LOG:  X';
 	const LOGLINE_TZ = '2012-10-14 21:39:48 EST LOG:  X';
 	const LOGLINE_4CHAR_TZ = '2012-10-14 21:39:48 AEST LOG:  X';
+	const LOGLINE_AWS_WITH_CONNECTION = '2017-04-26 01:44:39 UTC:10.1.0.58(36400):THE_USER@THE_DB:[11199]:LOG: Z';
 
 	/**
 	 * @var LogTimeParser
@@ -50,6 +51,19 @@ class EntryStartParserTest extends PGLANTestCase {
 
 		$this->assertEquals('USER', $part->getUser());
 		$this->assertEquals('DB', $part->getDB());
+	}
+
+	public function testAWSParseConnection() {
+
+		$line = $this->setupLine(self::LOGLINE_AWS_WITH_CONNECTION);
+
+		$this->assertTrue($this->parser->parse($line));
+
+		$part = $line->getPart('Connection');
+		$this->assertInstanceOf('ConnectionPart', $part);
+
+		$this->assertEquals('THE_USER', $part->getUser());
+		$this->assertEquals('THE_DB', $part->getDB());
 	}
 
 	public function testParseLogLevel() {
