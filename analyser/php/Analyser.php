@@ -68,6 +68,8 @@ class Analyser {
 
 		foreach ($this->filenames as $filename) {
 
+			$this->logger->info("Processing $filename\n");
+
 			$this->initReader($filename);
 
 			$this->initParser($filename);
